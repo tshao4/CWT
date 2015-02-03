@@ -199,6 +199,13 @@ public class NavigationDrawerFragment extends Fragment {
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
+
+        switch(position) {
+            case 0: Toast.makeText(getActivity(), getString(R.string.action_example), Toast.LENGTH_SHORT).show();
+                break;
+            case 1: break;
+            default: break;
+        }
     }
 
     @Override
@@ -247,8 +254,9 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+        if (item.getItemId() == R.id.add_course) {
+            // TODO
+            Toast.makeText(getActivity(), "not yet", Toast.LENGTH_SHORT).show();
             return true;
         }
 

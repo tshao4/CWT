@@ -1,6 +1,8 @@
 package com.courseworktracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
@@ -97,6 +100,33 @@ public class MainActivity extends ActionBarActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (id == R.id.add_term) {
+            // TODO 
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle("Title");
+            alert.setMessage("Message");
+
+// Set an EditText view to get user input
+            final EditText input = new EditText(this);
+            alert.setView(input);
+
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    // Do something with value!
+                }
+            });
+
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Canceled.
+                }
+            });
+
+            alert.show();
+        }
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {

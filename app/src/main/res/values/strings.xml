@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">CourseworkTracker</string>.
+    <string name="app_name">CourseworkTracker</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="add_term">Add a Term</string>
+    <string name="add_course">Add a Course</string>
+
+    <string name="title_section1">Overview</string>
+    <string name="title_section2">.</string>
+    <string name="title_section3">..</string>
+
+
+    <string name="add_course_name">Course Name</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
