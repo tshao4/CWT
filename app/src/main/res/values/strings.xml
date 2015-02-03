@@ -4,12 +4,11 @@
     <string name="app_name">CourseworkTracker</string>
 
     <string name="add_term">Add a Term</string>
+    <string name="add_term_msg">Please enter a name for the term:</string>
     <string name="add_course">Add a Course</string>
 
-    <string name="title_section1">Overview</string>
-    <string name="title_section2">.</string>
-    <string name="title_section3">..</string>
-
+    <string name="title_overview">Overview</string>
+    <string name="overview_error_add_course">Cannot add a course in overview, please select a term.</string>
 
     <string name="add_course_name">Course Name</string>
 
