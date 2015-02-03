@@ -102,9 +102,10 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
+                        // TODO show titles in drawer with term names
+                        getString(R.string.title_overview),
+                        //getString(R.string.title_section2),
+                        //getString(R.string.title_section3),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
@@ -201,7 +202,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         switch(position) {
-            case 0: Toast.makeText(getActivity(), getString(R.string.action_example), Toast.LENGTH_SHORT).show();
+            case 0: // TODO on select title
                 break;
             case 1: break;
             default: break;
@@ -255,8 +256,14 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.add_course) {
-            // TODO
-            Toast.makeText(getActivity(), "not yet", Toast.LENGTH_SHORT).show();
+
+            if (mCurrentSelectedPosition < 1) {
+                Toast.makeText(getActivity(), getString(R.string.overview_error_add_course), Toast.LENGTH_SHORT).show();
+            }
+            else {
+                // TODO invoke add course activity based on mCurrentSelectedPosition
+                Toast.makeText(getActivity(), "not yet", Toast.LENGTH_SHORT).show();
+            }
             return true;
         }
 

@@ -62,13 +62,13 @@ public class MainActivity extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.title_overview);
                 break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
+            case 2: // TODO change title based on term
+                // mTitle = getString(R.string.title_section2);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                // mTitle = getString(R.string.title_section3);
                 break;
         }
     }
@@ -102,20 +102,19 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
 
         if (id == R.id.add_term) {
-            // TODO 
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-            alert.setTitle("Title");
-            alert.setMessage("Message");
+            alert.setTitle(getString(R.string.add_term));
+            alert.setMessage(getString(R.string.add_term_msg));
 
-// Set an EditText view to get user input
+            // Set an EditText view to get user input
             final EditText input = new EditText(this);
             alert.setView(input);
 
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
 
-                    // Do something with value!
+                    // TODO create new term with input name
                 }
             });
 
@@ -126,6 +125,7 @@ public class MainActivity extends ActionBarActivity
             });
 
             alert.show();
+            return true;
         }
 
         //noinspection SimplifiableIfStatement
