@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -35,6 +36,8 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    public DBManager dbm = new DBManager(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,7 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
     }
 
     @Override
@@ -60,17 +64,10 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_overview);
-                break;
-            case 2: // TODO change title based on term
-                // mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                // mTitle = getString(R.string.title_section3);
-                break;
-        }
+        // TODO
+        // String[] strs = mNavigationDrawerFragment.getTerms();
+        //mTitle = strs[number - 1];
+        mTitle = "Overview";
     }
 
     public void restoreActionBar() {
@@ -114,13 +111,17 @@ public class MainActivity extends ActionBarActivity
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
 
-                    // TODO create new term with input name
+                // TODO create new term with input name
+                String tname = input.getText().toString();
+                dbm.open();
+                dbm.addTerm(tname);
+                dbm.close();
                 }
             });
 
             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-                    // Canceled.
+                // Canceled.
                 }
             });
 
@@ -176,4 +177,7 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    public DBManager getDB() {
+        return dbm;
+    }
 }

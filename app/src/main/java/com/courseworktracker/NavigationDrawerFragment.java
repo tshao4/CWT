@@ -1,5 +1,6 @@
 package com.courseworktracker;
 
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -58,6 +59,8 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    private DBManager dbm;
+
     public NavigationDrawerFragment() {
     }
 
@@ -101,12 +104,10 @@ public class NavigationDrawerFragment extends Fragment {
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                new String[]{
-                        // TODO show titles in drawer with term names
-                        getString(R.string.title_overview),
-                        //getString(R.string.title_section2),
-                        //getString(R.string.title_section3),
-                }));
+                getTerms()
+                //new String[] {"Overview"}
+        ));
+
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }
@@ -202,7 +203,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         switch(position) {
-            case 0: // TODO on select title
+            case 0: // TODO on select title -- intent
                 break;
             case 1: break;
             default: break;
@@ -217,6 +218,8 @@ public class NavigationDrawerFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
         }
+
+        dbm = new DBManager(getActivity());
     }
 
     @Override
@@ -293,5 +296,14 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+
+    public String[] getTerms() {
+        dbm.open();
+        String[] strs = dbm.getTerms();
+        strs[0] = getString(R.string.title_overview);
+        dbm.close();
+        return strs;
     }
 }

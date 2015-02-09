@@ -90,31 +90,39 @@ public class DBManager {
                         "(gid integer primary key autoincrement, " +
                         "gname varchar not null)");
 
+                Cursor cur = db.rawQuery("select 1 from " + TABLE_BREADTH, null);
                 ContentValues values = new ContentValues();
-                values.put(ATTR_BNAME, "Biological Science");
-                db.insert(TABLE_BREADTH, null, values);
-                values.put(ATTR_BNAME, "Humanities");
-                db.insert(TABLE_BREADTH, null, values);
-                values.put(ATTR_BNAME, "Interdivisional");
-                db.insert(TABLE_BREADTH, null, values);
-                values.put(ATTR_BNAME, "Literature");
-                db.insert(TABLE_BREADTH, null, values);
-                values.put(ATTR_BNAME, "Natural Science");
-                db.insert(TABLE_BREADTH, null, values);
-                values.put(ATTR_BNAME, "Physical Science");
-                db.insert(TABLE_BREADTH, null, values);
-                values.put(ATTR_BNAME, "Social Science");
-                db.insert(TABLE_BREADTH, null, values);
 
-                values.put(ATTR_GNAME, "Comm-A");
-                db.insert(TABLE_GEN_ED, null, values);
-                values.put(ATTR_GNAME, "Comm-B");
-                db.insert(TABLE_GEN_ED, null, values);
-                values.put(ATTR_GNAME, "Quan-A");
-                db.insert(TABLE_GEN_ED, null, values);
-                values.put(ATTR_GNAME, "Quan-B");
-                db.insert(TABLE_GEN_ED, null, values);
-            }
+                if (cur.getCount() < 1) {
+                    values.put(ATTR_BNAME, "Biological Science");
+                    db.insert(TABLE_BREADTH, null, values);
+                    values.put(ATTR_BNAME, "Humanities");
+                    db.insert(TABLE_BREADTH, null, values);
+                    values.put(ATTR_BNAME, "Interdivisional");
+                    db.insert(TABLE_BREADTH, null, values);
+                    values.put(ATTR_BNAME, "Literature");
+                    db.insert(TABLE_BREADTH, null, values);
+                    values.put(ATTR_BNAME, "Natural Science");
+                    db.insert(TABLE_BREADTH, null, values);
+                    values.put(ATTR_BNAME, "Physical Science");
+                    db.insert(TABLE_BREADTH, null, values);
+                    values.put(ATTR_BNAME, "Social Science");
+                    db.insert(TABLE_BREADTH, null, values);
+                }
+
+                cur = db.rawQuery("select 1 from " + TABLE_GEN_ED, null);
+
+                if (cur.getCount() < 1) {
+                    values.put(ATTR_GNAME, "Comm-A");
+                    db.insert(TABLE_GEN_ED, null, values);
+                    values.put(ATTR_GNAME, "Comm-B");
+                    db.insert(TABLE_GEN_ED, null, values);
+                    values.put(ATTR_GNAME, "Quan-A");
+                    db.insert(TABLE_GEN_ED, null, values);
+                    values.put(ATTR_GNAME, "Quan-B");
+                    db.insert(TABLE_GEN_ED, null, values);
+                }
+                            }
             catch(SQLException ex) {
                 ex.printStackTrace();
             }
@@ -140,6 +148,24 @@ public class DBManager {
         ContentValues values = new ContentValues();
         values.put(ATTR_TNAME, tname);
         return db.insert(TABLE_TERM, null, values);
+    }
+
+    public String[] getTerms() {
+
+        Cursor cur = db.query(TABLE_TERM, new String[]{ATTR_TID, ATTR_TNAME},
+                null, null, null, null, ATTR_TID);
+        int count = cur.getCount();
+
+        String[] strs = new String[count + 1];
+
+        cur.moveToFirst();
+
+        for(int i = 1; i <= count; ++i) {
+            strs[i] = cur.getString(cur.getColumnIndex(ATTR_TNAME));
+            cur.moveToNext();
+        }
+
+        return strs;
     }
 
     public long addCourse(int tid, String cname, int credits, String cgrade, int bid, int gid) {
