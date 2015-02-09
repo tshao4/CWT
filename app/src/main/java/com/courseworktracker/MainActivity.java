@@ -64,10 +64,8 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void onSectionAttached(int number) {
-        // TODO
-        // String[] strs = mNavigationDrawerFragment.getTerms();
-        //mTitle = strs[number - 1];
-        mTitle = "Overview";
+        String[] strs = mNavigationDrawerFragment.getTerms();
+        mTitle = strs[number - 1];
     }
 
     public void restoreActionBar() {
