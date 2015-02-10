@@ -5,6 +5,8 @@
 
     <string name="add_term">Add a Term</string>
     <string name="add_term_msg">Please enter a name for the term:</string>
+    <string name="delete_term">Delete a Term</string>
+    <string name="delete_term_msg">Are you sure you want to delete this term?</string>
     <string name="add_course">Add a Course</string>
 
     <string name="title_overview">Overview</string>

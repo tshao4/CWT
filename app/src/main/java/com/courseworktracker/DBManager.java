@@ -80,7 +80,8 @@ public class DBManager {
             try {
                 db.execSQL("create table if not exists " + TABLE_TERM +
                         "(tid integer primary key autoincrement, " +
-                        "tname varchar not null, tgpa real)");
+                        "tname varchar not null, tgpa real, " +
+                        "UNIQUE(tname) ON CONFLICT IGNORE)");
 
                 db.execSQL("create table if not exists " + TABLE_BREADTH +
                         "(bid integer primary key autoincrement, " +
@@ -148,6 +149,11 @@ public class DBManager {
         ContentValues values = new ContentValues();
         values.put(ATTR_TNAME, tname);
         return db.insert(TABLE_TERM, null, values);
+    }
+
+    public boolean deleteTerm(String tname) {
+        String[] whereArgs = new String[] {tname};
+        return db.delete(TABLE_TERM, ATTR_TNAME + "=?", whereArgs) > 0;
     }
 
     public String[] getTerms() {

@@ -1,5 +1,7 @@
 package com.courseworktracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -100,12 +103,18 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
+        mDrawerListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                return holdItem(position, (String)parent.getItemAtPosition(position));
+            }
+        });
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 getTerms()
-                //new String[] {"Overview"}
         ));
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
@@ -210,6 +219,39 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
+    public boolean holdItem(int position, final String tname) {
+        if (position == 0) {
+            return true;
+        }
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this.getActivity());
+
+        alert.setTitle(getString(R.string.delete_term));
+        alert.setMessage(getString(R.string.delete_term_msg));
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this.getActivity());
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dbm.open();
+                dbm.deleteTerm(tname);
+                dbm.close();
+                refreshList();
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
+        return true;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -298,6 +340,14 @@ public class NavigationDrawerFragment extends Fragment {
         void onNavigationDrawerItemSelected(int position);
     }
 
+    public void refreshList() {
+        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+                getActionBar().getThemedContext(),
+                android.R.layout.simple_list_item_activated_1,
+                android.R.id.text1,
+                getTerms()
+        ));
+    }
 
     public String[] getTerms() {
         dbm.open();

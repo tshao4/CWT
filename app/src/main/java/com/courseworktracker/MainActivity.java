@@ -114,6 +114,7 @@ public class MainActivity extends ActionBarActivity
                 dbm.open();
                 dbm.addTerm(tname);
                 dbm.close();
+                mNavigationDrawerFragment.refreshList();
                 }
             });
 
