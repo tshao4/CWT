@@ -5,6 +5,10 @@
 
     <dimen name="text_size_field_title">25sp</dimen>
 
+    <dimen name="button_size">120sp</dimen>
+
+    <dimen name="spinner_size">150sp</dimen>
+
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>

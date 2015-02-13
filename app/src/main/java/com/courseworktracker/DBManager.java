@@ -174,10 +174,10 @@ public class DBManager {
         return strs;
     }
 
-    public long addCourse(int tid, String cname, int credits, String cgrade, int bid, int gid) {
+    public long addCourse(String tname, String cname, int credits, String cgrade, int bid, int gid) {
 
         try {
-            db.execSQL("create table if not exists t" + tid +
+            db.execSQL("create table if not exists " + tname +
                     "(cid integer primary key autoincrement, " +
                     "cname varchar not null" + "credits integer not null," +
                     "cgrade varchar" + "bid integer, gid integer)");
