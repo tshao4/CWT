@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity
@@ -112,7 +113,10 @@ public class MainActivity extends ActionBarActivity
                 // TODO create new term with input name
                 String tname = input.getText().toString();
                 dbm.open();
-                dbm.addTerm(tname);
+                if (dbm.existTerm(tname))
+                    Toast.makeText(getParent(), R.string.add_term_err_exist, Toast.LENGTH_SHORT);
+                else
+                    dbm.addTerm(tname);
                 dbm.close();
                 mNavigationDrawerFragment.refreshList();
                 }

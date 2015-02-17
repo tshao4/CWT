@@ -174,6 +174,17 @@ public class DBManager {
         return strs;
     }
 
+    public boolean existTerm(String tname) {
+        String[] terms = getTerms();
+        for (String t : terms) {
+            if (t == null) break;
+            if (t.equals(tname)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public long addCourse(String tname, String cname, int credits, String cgrade, int bid, int gid) {
 
         try {
@@ -195,6 +206,38 @@ public class DBManager {
         return db.insert(TABLE_COURSE, null, values);
     }
 
+    public Course[] getCourses(String tname){
+        Cursor cur = db.query(tname, new String[]{ATTR_CID, ATTR_CNAME, ATTR_CREDIT,
+                        ATTR_CGRADE, ATTR_BID, ATTR_GID},
+                null, null, null, null, ATTR_CID);
+        int count = cur.getCount();
+
+        Course[] courses = new Course[count];
+
+        cur.moveToFirst();
+
+        for(int i = 0; i < count; ++i) {
+            String cname = cur.getString(cur.getColumnIndex(ATTR_CNAME));
+            int credit = cur.getInt(cur.getColumnIndex(ATTR_CREDIT));
+            String grade = cur.getString(cur.getColumnIndex(ATTR_CGRADE));
+            int bid = cur.getInt(cur.getColumnIndex(ATTR_BID));
+            int gid = cur.getInt(cur.getColumnIndex(ATTR_GID));
+            courses[i] = new Course(cname, credit, grade, bid, gid);
+            cur.moveToNext();
+        }
+        return courses;
+    }
+
+    public boolean existCourse(String tname, String cname){
+        Course[] courses = getCourses(tname);
+        for (Course c : courses) {
+            if (c == null);
+            if (c.getCname().equals(cname)) {
+                return true;
+            }
+        }
+        return false;
+    }
     /*
     public long addToList(int lid, int sid) {
 

@@ -94,7 +94,7 @@ public class AddCourse extends ActionBarActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 0) selected[3] = false;
                 else {
-                    course.setBreadth((String)adapterView.getItemAtPosition(i));
+                    course.setBreadth(i - 1);
                     selected[3] = true;
                 }
             }
@@ -110,7 +110,7 @@ public class AddCourse extends ActionBarActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 0) selected[4] = false;
                 else {
-                    course.setGen_ed((String) adapterView.getItemAtPosition(i));
+                    course.setGen_ed(i - 1);
                     selected[4] = true;
                 }
             }
@@ -133,6 +133,7 @@ public class AddCourse extends ActionBarActivity {
             public void onClick(View view) {
                 String cname = course_name_et.getText().toString();
                 String temp = cname.substring(0);
+                boolean valid = true;
                 if(temp.trim().length() < 1){
                     selected[0] = false;
                 }
@@ -142,8 +143,23 @@ public class AddCourse extends ActionBarActivity {
                 }
 
                 for(boolean b : selected){
-                    if(!b) Toast.makeText(getApplicationContext(),
-                            getString(R.string.add_course_error), Toast.LENGTH_SHORT).show();
+                    if(!b) {
+                        valid = false;
+                    }
+                }
+
+                if (valid) {
+                    String tname = getIntent().getStringExtra("tname");
+                    if (dbm.existCourse(tname, cname))
+                        Toast.makeText(getApplicationContext(),
+                                R.string.add_course_err_exist, Toast.LENGTH_SHORT).show();
+                    else
+                        dbm.addCourse(tname, course.getCname(), course.getCredit(),
+                            course.getGrade(), course.getBreadth(), course.getGen_ed());
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),
+                            R.string.add_course_err_incomplete, Toast.LENGTH_SHORT).show();
                 }
             }
         });

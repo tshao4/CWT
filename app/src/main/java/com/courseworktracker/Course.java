@@ -7,10 +7,10 @@ public class Course {
     private String cname;
     private int credit;
     private String grade;
-    private String breadth;
-    private String gen_ed;
+    private int breadth;
+    private int gen_ed;
 
-    public Course(String cname, int credit, String grade, String breadth, String gen_ed){
+    public Course(String cname, int credit, String grade, int breadth, int gen_ed){
         this.cname = cname;
         this.credit = credit;
         this.grade = grade;
@@ -32,11 +32,11 @@ public class Course {
         this.grade = grade;
     }
 
-    public void setBreadth(String breadth){
+    public void setBreadth(int breadth){
         this.breadth = breadth;
     }
 
-    public void setGen_ed(String gen_ed){
+    public void setGen_ed(int gen_ed){
         this.gen_ed = gen_ed;
     }
 
@@ -52,11 +52,11 @@ public class Course {
         return grade;
     }
 
-    public String getBreadth(){
+    public int getBreadth(){
         return breadth;
     }
 
-    public String getGen_ed(){
+    public int getGen_ed(){
         return gen_ed;
     }
 }

@@ -2,6 +2,7 @@ package com.courseworktracker;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
@@ -303,11 +304,12 @@ public class NavigationDrawerFragment extends Fragment {
         if (item.getItemId() == R.id.add_course) {
 
             if (mCurrentSelectedPosition < 1) {
-                Toast.makeText(getActivity(), getString(R.string.overview_error_add_course), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.overview_error_add_course, Toast.LENGTH_SHORT).show();
             }
             else {
                 // TODO invoke add course activity based on mCurrentSelectedPosition
-                Toast.makeText(getActivity(), "not yet", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), AddCourse.class);
+                startActivity(intent);
             }
             return true;
         }
