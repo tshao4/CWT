@@ -307,8 +307,9 @@ public class NavigationDrawerFragment extends Fragment {
                 Toast.makeText(getActivity(), R.string.overview_error_add_course, Toast.LENGTH_SHORT).show();
             }
             else {
-                // TODO invoke add course activity based on mCurrentSelectedPosition
+                // invoke add course activity based on mCurrentSelectedPosition
                 Intent intent = new Intent(getActivity(), AddCourse.class);
+                intent.putExtra("tname", getTerms()[mCurrentSelectedPosition]);
                 startActivity(intent);
             }
             return true;

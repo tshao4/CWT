@@ -20,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +38,8 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
-    public DBManager dbm = new DBManager(this);
+    private ListView courseList;
+    private DBManager dbm = new DBManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +54,16 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+
+        // TODO set up course list
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, CourseList.newInstance(position + 1))
                 .commit();
     }
 
@@ -110,7 +113,6 @@ public class MainActivity extends ActionBarActivity
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
 
-                // TODO create new term with input name
                 String tname = input.getText().toString();
                 dbm.open();
                 if (dbm.existTerm(tname))
@@ -178,9 +180,5 @@ public class MainActivity extends ActionBarActivity
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
-    }
-
-    public DBManager getDB() {
-        return dbm;
     }
 }

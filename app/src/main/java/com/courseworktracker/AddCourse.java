@@ -124,7 +124,7 @@ public class AddCourse extends ActionBarActivity {
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                finish();
             }
         });
 
@@ -150,12 +150,18 @@ public class AddCourse extends ActionBarActivity {
 
                 if (valid) {
                     String tname = getIntent().getStringExtra("tname");
-                    if (dbm.existCourse(tname, cname))
+                    dbm.open();
+                    if (dbm.existCourse(tname, cname)) {
                         Toast.makeText(getApplicationContext(),
                                 R.string.add_course_err_exist, Toast.LENGTH_SHORT).show();
-                    else
+                        dbm.close();
+                    }
+                    else {
                         dbm.addCourse(tname, course.getCname(), course.getCredit(),
-                            course.getGrade(), course.getBreadth(), course.getGen_ed());
+                                course.getGrade(), course.getBreadth(), course.getGen_ed());
+                        dbm.close();
+                        finish();
+                    }
                 }
                 else{
                     Toast.makeText(getApplicationContext(),

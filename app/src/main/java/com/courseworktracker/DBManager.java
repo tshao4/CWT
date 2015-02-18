@@ -41,7 +41,7 @@ public class DBManager {
     //Course
     private static final String ATTR_CID = "cid";
     private static final String ATTR_CNAME = "cname";
-    private static final String ATTR_CREDIT = "credit";
+    private static final String ATTR_CREDIT = "credits";
     private static final String ATTR_CGRADE = "cgrade";
 
     // Breadth
@@ -114,6 +114,8 @@ public class DBManager {
                 cur = db.rawQuery("select 1 from " + TABLE_GEN_ED, null);
 
                 if (cur.getCount() < 1) {
+                    values.put(ATTR_GNAME, "None");
+                    db.insert(TABLE_GEN_ED, null, values);
                     values.put(ATTR_GNAME, "Comm-A");
                     db.insert(TABLE_GEN_ED, null, values);
                     values.put(ATTR_GNAME, "Comm-B");
@@ -148,11 +150,24 @@ public class DBManager {
 
         ContentValues values = new ContentValues();
         values.put(ATTR_TNAME, tname);
+
+        String  createTable = "create table if not exists " + tname +
+                "(cid integer primary key autoincrement, " +
+                "cname varchar not null, credits integer not null," +
+                "cgrade varchar not null, bid integer not null, gid integer not null)";
+        try {
+            db.execSQL(createTable);
+        }
+        catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+
         return db.insert(TABLE_TERM, null, values);
     }
 
     public boolean deleteTerm(String tname) {
         String[] whereArgs = new String[] {tname};
+        db.execSQL("drop table if exists " + tname);
         return db.delete(TABLE_TERM, ATTR_TNAME + "=?", whereArgs) > 0;
     }
 
@@ -187,23 +202,13 @@ public class DBManager {
 
     public long addCourse(String tname, String cname, int credits, String cgrade, int bid, int gid) {
 
-        try {
-            db.execSQL("create table if not exists " + tname +
-                    "(cid integer primary key autoincrement, " +
-                    "cname varchar not null" + "credits integer not null," +
-                    "cgrade varchar" + "bid integer, gid integer)");
-        }
-        catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-
         ContentValues values = new ContentValues();
         values.put(ATTR_CNAME, cname);
         values.put(ATTR_CREDIT, credits);
         values.put(ATTR_CGRADE, cgrade);
         values.put(ATTR_BID, bid);
         values.put(ATTR_GID, gid);
-        return db.insert(TABLE_COURSE, null, values);
+        return db.insert(tname, null, values);
     }
 
     public Course[] getCourses(String tname){
@@ -230,8 +235,9 @@ public class DBManager {
 
     public boolean existCourse(String tname, String cname){
         Course[] courses = getCourses(tname);
+
         for (Course c : courses) {
-            if (c == null);
+            if (c == null) break;
             if (c.getCname().equals(cname)) {
                 return true;
             }

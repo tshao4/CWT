@@ -39,7 +39,6 @@
         <item>5</item>
         <item>6</item>
     </string-array>
-
     <string-array name="grade">
         <item>Select..</item>
         <item>Not Graded</item>
@@ -52,7 +51,6 @@
         <item>D</item>
         <item>F</item>
     </string-array>
-
     <string-array name="breadth">
         <item>Select..</item>
         <item>Biological Science</item>
@@ -63,13 +61,15 @@
         <item>Physical Science</item>
         <item>Social Science</item>
     </string-array>
-
     <string-array name="gen_ed">
         <item>Select..</item>
+        <item>None</item>
         <item>Comm-A</item>
         <item>Comm-B</item>
         <item>Quan-A</item>
         <item>Quan-B</item>
     </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
