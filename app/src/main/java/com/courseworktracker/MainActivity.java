@@ -61,9 +61,28 @@ public class MainActivity extends ActionBarActivity
         // update the main content by replacing fragments
 
         // TODO set up course list
+        if (position > 0) {
+            ListView courseList = (ListView)findViewById(R.id.listView_courseList);
+            String[] terms = mNavigationDrawerFragment.getTerms();
+            dbm.open();
+            Course[] courses = dbm.getCourses(terms[position]);
+            dbm.close();
+            String[] courseNames = new String[courses.length];
+
+            for (int i = 0; i < courses.length; ++i) {
+                courseNames[i] = courses[i].getCname();
+            }
+
+            courseList.setAdapter(new ArrayAdapter<String>(
+                    this,
+                    android.R.layout.simple_list_item_activated_1,
+                    android.R.id.text1,
+                    courseNames));
+        }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, CourseList.newInstance(position + 1))
+                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
     }
 
@@ -116,7 +135,8 @@ public class MainActivity extends ActionBarActivity
                 String tname = input.getText().toString();
                 dbm.open();
                 if (dbm.existTerm(tname))
-                    Toast.makeText(getParent(), R.string.add_term_err_exist, Toast.LENGTH_SHORT);
+                    Toast.makeText(getParent(),
+                            R.string.add_term_err_exist, Toast.LENGTH_SHORT).show();
                 else
                     dbm.addTerm(tname);
                 dbm.close();
@@ -170,8 +190,8 @@ public class MainActivity extends ActionBarActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+
+            return inflater.inflate(R.layout.fragment_main, container, false);
         }
 
         @Override

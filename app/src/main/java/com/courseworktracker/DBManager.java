@@ -92,38 +92,27 @@ public class DBManager {
                         "gname varchar not null)");
 
                 Cursor cur = db.rawQuery("select 1 from " + TABLE_BREADTH, null);
-                ContentValues values = new ContentValues();
 
                 if (cur.getCount() < 1) {
-                    values.put(ATTR_BNAME, "Biological Science");
-                    db.insert(TABLE_BREADTH, null, values);
-                    values.put(ATTR_BNAME, "Humanities");
-                    db.insert(TABLE_BREADTH, null, values);
-                    values.put(ATTR_BNAME, "Interdivisional");
-                    db.insert(TABLE_BREADTH, null, values);
-                    values.put(ATTR_BNAME, "Literature");
-                    db.insert(TABLE_BREADTH, null, values);
-                    values.put(ATTR_BNAME, "Natural Science");
-                    db.insert(TABLE_BREADTH, null, values);
-                    values.put(ATTR_BNAME, "Physical Science");
-                    db.insert(TABLE_BREADTH, null, values);
-                    values.put(ATTR_BNAME, "Social Science");
-                    db.insert(TABLE_BREADTH, null, values);
+
+                    dbInsert(db, TABLE_BREADTH, ATTR_BNAME, "Biological Science");
+                    dbInsert(db, TABLE_BREADTH, ATTR_BNAME, "Humanities");
+                    dbInsert(db, TABLE_BREADTH, ATTR_BNAME, "Interdivisional");
+                    dbInsert(db, TABLE_BREADTH, ATTR_BNAME, "Literature");
+                    dbInsert(db, TABLE_BREADTH, ATTR_BNAME, "Natural Science");
+                    dbInsert(db, TABLE_BREADTH, ATTR_BNAME, "Physical Science");
+                    dbInsert(db, TABLE_BREADTH, ATTR_BNAME, "Social Science");
                 }
 
                 cur = db.rawQuery("select 1 from " + TABLE_GEN_ED, null);
 
                 if (cur.getCount() < 1) {
-                    values.put(ATTR_GNAME, "None");
-                    db.insert(TABLE_GEN_ED, null, values);
-                    values.put(ATTR_GNAME, "Comm-A");
-                    db.insert(TABLE_GEN_ED, null, values);
-                    values.put(ATTR_GNAME, "Comm-B");
-                    db.insert(TABLE_GEN_ED, null, values);
-                    values.put(ATTR_GNAME, "Quan-A");
-                    db.insert(TABLE_GEN_ED, null, values);
-                    values.put(ATTR_GNAME, "Quan-B");
-                    db.insert(TABLE_GEN_ED, null, values);
+
+                    dbInsert(db, TABLE_GEN_ED, ATTR_GNAME, "None");
+                    dbInsert(db, TABLE_GEN_ED, ATTR_GNAME, "Comm-A");
+                    dbInsert(db, TABLE_GEN_ED, ATTR_GNAME, "Comm-B");
+                    dbInsert(db, TABLE_GEN_ED, ATTR_GNAME, "Quan-A");
+                    dbInsert(db, TABLE_GEN_ED, ATTR_GNAME, "Quan-B");
                 }
                             }
             catch(SQLException ex) {
@@ -134,6 +123,12 @@ public class DBManager {
         @Override
         public void onUpgrade(SQLiteDatabase db, int i, int i2) {
 
+        }
+
+        private void dbInsert(SQLiteDatabase db, String tbl_name, String col, String value) {
+            ContentValues values = new ContentValues();
+            values.put(col, value);
+            db.insert(tbl_name, null, values);
         }
     }
 
