@@ -230,10 +230,6 @@ public class NavigationDrawerFragment extends Fragment {
         alert.setTitle(getString(R.string.delete_term));
         alert.setMessage(getString(R.string.delete_term_msg));
 
-        // Set an EditText view to get user input
-        final EditText input = new EditText(this.getActivity());
-        alert.setView(input);
-
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dbm.open();

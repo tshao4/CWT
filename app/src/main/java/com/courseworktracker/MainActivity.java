@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,7 +40,6 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
-    private ListView courseList;
     private DBManager dbm = new DBManager(this);
 
     @Override
@@ -59,26 +60,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-
-        // TODO set up course list
-        if (position > 0) {
-            ListView courseList = (ListView)findViewById(R.id.listView_courseList);
-            String[] terms = mNavigationDrawerFragment.getTerms();
-            dbm.open();
-            Course[] courses = dbm.getCourses(terms[position]);
-            dbm.close();
-            String[] courseNames = new String[courses.length];
-
-            for (int i = 0; i < courses.length; ++i) {
-                courseNames[i] = courses[i].getCname();
-            }
-
-            courseList.setAdapter(new ArrayAdapter<String>(
-                    this,
-                    android.R.layout.simple_list_item_activated_1,
-                    android.R.id.text1,
-                    courseNames));
-        }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -172,6 +153,12 @@ public class MainActivity extends ActionBarActivity
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+        public static boolean doUpdate = false;
+
+        private ListView courseList;
+        private String[] courseNames;
+        String[] terms;
+        private DBManager dbm;
         /**
          * Returns a new instance of this fragment for the given section
          * number.
@@ -190,7 +177,42 @@ public class MainActivity extends ActionBarActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            // empty container at start
+            container.removeAllViews();
+            courseList = (ListView)inflater.inflate(R.layout.listview_layout, null);
+            courseList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    // TODO course list click
+                }
 
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+            courseList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    // TODO course list hold
+                    return false;
+                }
+            });
+            Bundle args = getArguments();
+            int position = args.getInt(ARG_SECTION_NUMBER) - 1;
+            if (position > 0) {
+                dbm.open();
+                terms = dbm.getTerms();
+                courseNames = dbm.getCourseNames(terms[position]);
+                dbm.close();
+
+                courseList.setAdapter(new ArrayAdapter<String>(
+                        getActivity(),
+                        android.R.layout.simple_list_item_activated_1,
+                        android.R.id.text1,
+                        courseNames));
+                container.addView(courseList);
+            }
             return inflater.inflate(R.layout.fragment_main, container, false);
         }
 
@@ -199,6 +221,27 @@ public class MainActivity extends ActionBarActivity
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+        dbm = new DBManager(getActivity());
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();  // Always call the superclass method first
+
+            if (doUpdate) {
+                Bundle args = getArguments();
+                int position = args.getInt(ARG_SECTION_NUMBER) - 1;
+                dbm.open();
+                courseNames = dbm.getCourseNames(terms[position]);
+                dbm.close();
+                courseList.setAdapter(new ArrayAdapter<String>(
+                        getActivity(),
+                        android.R.layout.simple_list_item_activated_1,
+                        android.R.id.text1,
+                        courseNames
+                ));
+                doUpdate = false;
+            }
         }
     }
 }

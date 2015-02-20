@@ -57,7 +57,6 @@ public class DBManager {
     private static final int DB_VERSION = 1;
 
     private static final String TABLE_TERM = "terms";
-    private static final String TABLE_COURSE = "courses";
     private static final String TABLE_BREADTH = "breadth";
     private static final String TABLE_GEN_ED = "gen_ed";
 
@@ -114,7 +113,8 @@ public class DBManager {
                     dbInsert(db, TABLE_GEN_ED, ATTR_GNAME, "Quan-A");
                     dbInsert(db, TABLE_GEN_ED, ATTR_GNAME, "Quan-B");
                 }
-                            }
+                cur.close();
+            }
             catch(SQLException ex) {
                 ex.printStackTrace();
             }
@@ -180,7 +180,7 @@ public class DBManager {
             strs[i] = cur.getString(cur.getColumnIndex(ATTR_TNAME));
             cur.moveToNext();
         }
-
+        cur.close();
         return strs;
     }
 
@@ -225,6 +225,25 @@ public class DBManager {
             courses[i] = new Course(cname, credit, grade, bid, gid);
             cur.moveToNext();
         }
+        cur.close();
+        return courses;
+    }
+
+    public String[] getCourseNames(String tname) {
+        Cursor cur = db.query(tname, new String[]{ATTR_CID, ATTR_CNAME},
+                null, null, null, null, ATTR_CID);
+        int count = cur.getCount();
+
+        String[] courses = new String[count];
+
+        cur.moveToFirst();
+
+        for(int i = 0; i < count; ++i) {
+            String cname = cur.getString(cur.getColumnIndex(ATTR_CNAME));
+            courses[i] = cname;
+            cur.moveToNext();
+        }
+        cur.close();
         return courses;
     }
 

@@ -160,6 +160,7 @@ public class AddCourse extends ActionBarActivity {
                         dbm.addCourse(tname, course.getCname(), course.getCredit(),
                                 course.getGrade(), course.getBreadth(), course.getGen_ed());
                         dbm.close();
+                        MainActivity.PlaceholderFragment.doUpdate = true;
                         finish();
                     }
                 }
