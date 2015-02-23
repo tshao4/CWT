@@ -38,22 +38,22 @@ public class AddCourse extends ActionBarActivity {
         Button bt_next = (Button)findViewById(R.id.button_next_add_course_1);
 
         ArrayAdapter<CharSequence> sp_credit_adt = ArrayAdapter.createFromResource(this,
-                R.array.credits, android.R.layout.simple_spinner_item);
+                R.array.credits, R.layout.spinner_target);
         sp_credit_adt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_credit.setAdapter(sp_credit_adt);
 
         ArrayAdapter<CharSequence> sp_grade_adt = ArrayAdapter.createFromResource(this,
-                R.array.grade, android.R.layout.simple_spinner_item);
+                R.array.grade, R.layout.spinner_target);
         sp_grade_adt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_grade.setAdapter(sp_grade_adt);
 
         ArrayAdapter<CharSequence> sp_breadth_adt = ArrayAdapter.createFromResource(this,
-                R.array.breadth, android.R.layout.simple_spinner_item);
+                R.array.breadth, R.layout.spinner_target);
         sp_breadth_adt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_breadth.setAdapter(sp_breadth_adt);
 
         ArrayAdapter<CharSequence> sp_gen_ed_adt = ArrayAdapter.createFromResource(this,
-                R.array.gen_ed, android.R.layout.simple_spinner_item);
+                R.array.gen_ed, R.layout.spinner_target);
         sp_gen_ed_adt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_gen_ed.setAdapter(sp_gen_ed_adt);
 
