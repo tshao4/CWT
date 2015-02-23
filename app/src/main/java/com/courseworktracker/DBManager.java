@@ -247,6 +247,11 @@ public class DBManager {
         return courses;
     }
 
+    public boolean deleteCourse(String tname, String cname) {
+        String[] whereArgs = new String[] {cname};
+        return db.delete(tname, ATTR_CNAME + "=?", whereArgs) > 0;
+    }
+
     public boolean existCourse(String tname, String cname){
         Course[] courses = getCourses(tname);
 

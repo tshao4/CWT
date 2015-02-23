@@ -18,6 +18,8 @@
     <string name="add_course_credit">Credits:</string>
     <string name="add_course_grade">Grade:</string>
     <string name="text_choose">Choose..</string>
+    <string name="delete_course">Delete a Course</string>
+    <string name="delete_course_msg">Are you sure you want to delete this course?</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_next">Next</string>
     <string name="button_prev">Prev</string>

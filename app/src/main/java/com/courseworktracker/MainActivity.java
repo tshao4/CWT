@@ -194,8 +194,7 @@ public class MainActivity extends ActionBarActivity
             courseList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    // TODO course list hold
-                    return false;
+                    return holdItem(i, (String)adapterView.getItemAtPosition(i));
                 }
             });
             Bundle args = getArguments();
@@ -229,19 +228,50 @@ public class MainActivity extends ActionBarActivity
             super.onResume();  // Always call the superclass method first
 
             if (doUpdate) {
-                Bundle args = getArguments();
-                int position = args.getInt(ARG_SECTION_NUMBER) - 1;
-                dbm.open();
-                courseNames = dbm.getCourseNames(terms[position]);
-                dbm.close();
-                courseList.setAdapter(new ArrayAdapter<String>(
-                        getActivity(),
-                        android.R.layout.simple_list_item_activated_1,
-                        android.R.id.text1,
-                        courseNames
-                ));
-                doUpdate = false;
+                refreshList();
             }
+        }
+
+        public boolean holdItem(int position, final String cname) {
+
+            Bundle args = getArguments();
+            final int i = args.getInt(ARG_SECTION_NUMBER) - 1;
+            AlertDialog.Builder alert = new AlertDialog.Builder(this.getActivity());
+
+            alert.setTitle(getString(R.string.delete_course));
+            alert.setMessage(getString(R.string.delete_course_msg));
+
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dbm.open();
+                    dbm.deleteCourse(terms[i], cname);
+                    dbm.close();
+                    refreshList();
+                }
+            });
+
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Canceled.
+                }
+            });
+
+            alert.show();
+            return true;
+        }
+
+        public void refreshList(){
+            Bundle args = getArguments();
+            int position = args.getInt(ARG_SECTION_NUMBER) - 1;
+            dbm.open();
+            courseNames = dbm.getCourseNames(terms[position]);
+            dbm.close();
+            courseList.setAdapter(new ArrayAdapter<String>(
+                    getActivity(),
+                    android.R.layout.simple_list_item_activated_1,
+                    android.R.id.text1,
+                    courseNames
+            ));
         }
     }
 }
