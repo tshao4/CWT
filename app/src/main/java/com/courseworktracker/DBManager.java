@@ -77,6 +77,7 @@ public class DBManager {
         @Override
         public void onCreate(SQLiteDatabase db) {
             try {
+                db.beginTransaction();
                 db.execSQL("create table if not exists " + TABLE_TERM +
                         "(tid integer primary key autoincrement, " +
                         "tname varchar not null, tgpa real, " +
@@ -114,9 +115,13 @@ public class DBManager {
                     dbInsert(db, TABLE_GEN_ED, ATTR_GNAME, "Quan-B");
                 }
                 cur.close();
+                db.setTransactionSuccessful();
             }
             catch(SQLException ex) {
                 ex.printStackTrace();
+            }
+            finally {
+                db.endTransaction();
             }
         }
 
@@ -162,8 +167,20 @@ public class DBManager {
 
     public boolean deleteTerm(String tname) {
         String[] whereArgs = new String[] {tname};
-        db.execSQL("drop table if exists " + tname);
-        return db.delete(TABLE_TERM, ATTR_TNAME + "=?", whereArgs) > 0;
+        boolean tmp = false;
+        try {
+            db.beginTransaction();
+            db.execSQL("drop table if exists " + tname);
+            tmp = db.delete(TABLE_TERM, ATTR_TNAME + "=?", whereArgs) > 0;
+            db.setTransactionSuccessful();
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        finally {
+            db.endTransaction();
+        }
+        return tmp;
     }
 
     public String[] getTerms() {

@@ -183,7 +183,11 @@ public class MainActivity extends ActionBarActivity
             courseList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    // TODO course list click
+                    // TODO course list click NOT WORKING
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, CourseDetailFragment.newInstance(i))
+                            .commit();
                 }
 
                 @Override
