@@ -180,19 +180,14 @@ public class MainActivity extends ActionBarActivity
             // empty container at start
             container.removeAllViews();
             courseList = (ListView)inflater.inflate(R.layout.listview_layout, null);
-            courseList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            courseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    // TODO course list click NOT WORKING
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    // TODO course list click need to pass term name & course name
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, CourseDetailFragment.newInstance(i))
                             .commit();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
                 }
             });
             courseList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

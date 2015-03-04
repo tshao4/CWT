@@ -26,6 +26,7 @@ public class CourseDetailFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private int position;
 
+    private DBManager dbm;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -60,11 +61,13 @@ public class CourseDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        container.removeAllViews();
         return inflater.inflate(R.layout.fragment_course_detail, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
+        // TODO press back button go back to course list fragment
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
@@ -73,12 +76,10 @@ public class CourseDetailFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        // TODO update title
+        // ((MainActivity) activity).onSectionAttached(
+           //     getArguments().getInt(ARG_POSITION));
+        dbm = new DBManager(getActivity());
     }
 
     @Override
