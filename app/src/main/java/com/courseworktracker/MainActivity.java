@@ -64,12 +64,17 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .addToBackStack("null")
                 .commit();
     }
 
     public void onSectionAttached(int number) {
         String[] strs = mNavigationDrawerFragment.getTerms();
         mTitle = strs[number - 1];
+    }
+
+    public void onCourseSectionAttached(String s) {
+        mTitle = s;
     }
 
     public void restoreActionBar() {
@@ -143,6 +148,15 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        // press back button go back to previous fragment
+        if (getFragmentManager().getBackStackEntryCount() > 0)
+            getFragmentManager().popBackStack();
+        else
+            super.onBackPressed();
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -180,27 +194,31 @@ public class MainActivity extends ActionBarActivity
             // empty container at start
             container.removeAllViews();
             courseList = (ListView)inflater.inflate(R.layout.listview_layout, null);
-            courseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    // TODO course list click need to pass term name & course name
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.container, CourseDetailFragment.newInstance(i))
-                            .commit();
-                }
-            });
-            courseList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    return holdItem(i, (String)adapterView.getItemAtPosition(i));
-                }
-            });
             Bundle args = getArguments();
-            int position = args.getInt(ARG_SECTION_NUMBER) - 1;
+            final int position = args.getInt(ARG_SECTION_NUMBER) - 1;
             if (position > 0) {
                 dbm.open();
                 terms = dbm.getTerms();
+
+                courseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        // TODO course list click
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.container, CourseDetailFragment.newInstance(i,
+                                        terms[position], (String)adapterView.getItemAtPosition(i)))
+                                .addToBackStack("null")
+                                .commit();
+                    }
+                });
+                courseList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        return holdItem(i, (String)adapterView.getItemAtPosition(i));
+                    }
+                });
+
                 courseNames = dbm.getCourseNames(terms[position]);
                 dbm.close();
 

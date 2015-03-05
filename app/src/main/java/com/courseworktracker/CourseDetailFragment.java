@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,13 @@ public class CourseDetailFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POSITION = "position";
+    private static final String ARG_CNAME = "cname";
+    private static final String ARG_TNAME = "tname";
 
     // TODO: Rename and change types of parameters
     private int position;
+    private String tname;
+    private String cname;
 
     private DBManager dbm;
     private OnFragmentInteractionListener mListener;
@@ -37,10 +42,12 @@ public class CourseDetailFragment extends Fragment {
      * @return A new instance of fragment CourseDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CourseDetailFragment newInstance(int position) {
+    public static CourseDetailFragment newInstance(int position, String tname, String cname) {
         CourseDetailFragment fragment = new CourseDetailFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_POSITION, position);
+        args.putString(ARG_TNAME, tname);
+        args.putString(ARG_CNAME, cname);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,6 +61,8 @@ public class CourseDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             position = getArguments().getInt(ARG_POSITION);
+            tname = getArguments().getString(ARG_TNAME);
+            cname = getArguments().getString(ARG_CNAME);
         }
     }
 
@@ -67,7 +76,6 @@ public class CourseDetailFragment extends Fragment {
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-        // TODO press back button go back to course list fragment
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
@@ -76,9 +84,9 @@ public class CourseDetailFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // TODO update title
-        // ((MainActivity) activity).onSectionAttached(
-           //     getArguments().getInt(ARG_POSITION));
+        // update title
+        ((MainActivity) activity).onCourseSectionAttached(
+                getArguments().getString(ARG_CNAME));
         dbm = new DBManager(getActivity());
     }
 
@@ -100,6 +108,7 @@ public class CourseDetailFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
+        // TODO: (if needed) implement onFragmentInteraction() in MainActivity
         public void onFragmentInteraction(Uri uri);
     }
 
