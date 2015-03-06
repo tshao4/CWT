@@ -71,6 +71,7 @@ public class CourseDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         container.removeAllViews();
+        // TODO: inflate layout
         return inflater.inflate(R.layout.fragment_course_detail, container, false);
     }
 

@@ -64,7 +64,6 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .addToBackStack("null")
                 .commit();
     }
 
@@ -75,6 +74,8 @@ public class MainActivity extends ActionBarActivity
 
     public void onCourseSectionAttached(String s) {
         mTitle = s;
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(mTitle);
     }
 
     public void restoreActionBar() {
@@ -151,8 +152,9 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onBackPressed() {
         // press back button go back to previous fragment
-        if (getFragmentManager().getBackStackEntryCount() > 0)
-            getFragmentManager().popBackStack();
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0)
+            fm.popBackStack();
         else
             super.onBackPressed();
     }
