@@ -1,5 +1,8 @@
 package com.courseworktracker;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 /**
  * Created by TerryS on 2/13/15.
  */
@@ -9,6 +12,8 @@ public class Course {
     private String grade;
     private int breadth;
     private int gen_ed;
+    private ArrayList<Section> sections;
+    private ArrayList<CourseWork> courseWorks;
 
     public Course(String cname, int credit, String grade, int breadth, int gen_ed){
         this.cname = cname;
@@ -40,6 +45,10 @@ public class Course {
         this.gen_ed = gen_ed;
     }
 
+    public void setSections(ArrayList<Section> sections){
+        this.sections = sections;
+    }
+
     public String getCname(){
         return cname;
     }
@@ -58,5 +67,9 @@ public class Course {
 
     public int getGen_ed(){
         return gen_ed;
+    }
+
+    public ArrayList<Section> getSections(){
+        return sections;
     }
 }

@@ -131,6 +131,7 @@ public class AddCourse extends ActionBarActivity {
         bt_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // TODO: go to add section page, or maybe all in one page...
                 String cname = course_name_et.getText().toString();
                 String temp = cname.substring(0);
                 boolean valid = true;
