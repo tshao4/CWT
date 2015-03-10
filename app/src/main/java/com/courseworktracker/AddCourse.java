@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -121,6 +122,10 @@ public class AddCourse extends ActionBarActivity {
             }
         });
 
+        // TODO add section using list_row_2col layout and CustomAdapter
+        ListView lv_sec = (ListView) findViewById(R.id.listView_section);
+        lv_sec.setAdapter(null);
+
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,7 +136,7 @@ public class AddCourse extends ActionBarActivity {
         bt_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: go to add section page, or maybe all in one page...
+                // TODO: add sections to db
                 String cname = course_name_et.getText().toString();
                 String temp = cname.substring(0);
                 boolean valid = true;
