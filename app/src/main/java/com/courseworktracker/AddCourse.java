@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.zip.CheckedOutputStream;
 
 
@@ -23,6 +24,8 @@ public class AddCourse extends ActionBarActivity {
     private DBManager dbm = new DBManager(this);
     private Course course = new Course();
     private boolean[] selected = {false, false, false, false, false};
+    private ArrayList<String> sec_title = new ArrayList<String>(),
+            sec_record = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +127,9 @@ public class AddCourse extends ActionBarActivity {
 
         // TODO add section using list_row_2col layout and CustomAdapter
         ListView lv_sec = (ListView) findViewById(R.id.listView_section);
-        lv_sec.setAdapter(null);
+        lv_sec.setAdapter(new CustomAdapter(sec_title, sec_record));
+
+        // TODO add section button
 
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
