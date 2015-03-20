@@ -122,7 +122,7 @@ public class MainActivity extends ActionBarActivity
                 String tname = input.getText().toString();
                 dbm.open();
                 if (dbm.existTerm(tname))
-                    Toast.makeText(getParent(),
+                    Toast.makeText(getApplicationContext(),
                             R.string.add_term_err_exist, Toast.LENGTH_SHORT).show();
                 else
                     dbm.addTerm(tname);

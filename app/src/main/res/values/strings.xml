@@ -17,6 +17,7 @@
     <string name="add_course_gen_ed">Gen-Ed:</string>
     <string name="add_course_credit">Credits:</string>
     <string name="add_course_grade">Grade:</string>
+    <string name="add_course_section">Sections:</string>
     <string name="text_choose">Choose..</string>
     <string name="delete_course">Delete a Course</string>
     <string name="delete_course_msg">Are you sure you want to delete this course?</string>

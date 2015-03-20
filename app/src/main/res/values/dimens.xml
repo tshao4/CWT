@@ -4,6 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="text_size_field_title">25sp</dimen>
+    <dimen name="text_size_content">16sp</dimen>
 
     <dimen name="button_size">120sp</dimen>
 
