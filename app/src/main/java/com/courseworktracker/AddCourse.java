@@ -1,6 +1,8 @@
 package com.courseworktracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import java.util.zip.CheckedOutputStream;
 public class AddCourse extends ActionBarActivity {
 
     private DBManager dbm = new DBManager(this);
+    private Activity activity = this;
     private Course course = new Course();
     private boolean[] selected = {false, false, false, false, false};
     private ArrayList<String> sec_title = new ArrayList<String>(),
@@ -38,8 +41,9 @@ public class AddCourse extends ActionBarActivity {
         Spinner sp_breadth = (Spinner)findViewById(R.id.spinner_breadth);
         Spinner sp_gen_ed = (Spinner)findViewById(R.id.spinner_gen_ed);
 
-        Button bt_cancel = (Button)findViewById(R.id.button_cancel_add_course_1);
-        Button bt_next = (Button)findViewById(R.id.button_next_add_course_1);
+        Button bt_cancel = (Button)findViewById(R.id.button_cancel_add_course);
+        Button bt_next = (Button)findViewById(R.id.button_ok_add_course);
+        Button bt_add = (Button)findViewById(R.id.button_add_section_add_course);
 
         ArrayAdapter<CharSequence> sp_credit_adt = ArrayAdapter.createFromResource(this,
                 R.array.credits, R.layout.spinner_target);
@@ -125,11 +129,9 @@ public class AddCourse extends ActionBarActivity {
             }
         });
 
-        // TODO add section using list_row_2col layout and CustomAdapter
         ListView lv_sec = (ListView) findViewById(R.id.listView_section);
-        lv_sec.setAdapter(new CustomAdapter(sec_title, sec_record));
 
-        // TODO add section button
+        // add three buttons
 
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +181,36 @@ public class AddCourse extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(),
                             R.string.add_course_err_incomplete, Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        bt_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO custom dialog box
+                // add to sections listView
+                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+
+                alert.setTitle(getString(R.string.add_section));
+                alert.setMessage(getString(R.string.add_section_msg));
+
+                // Set an EditText view to get user input
+                final EditText input = new EditText(activity);
+                alert.setView(input);
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // TODO
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Canceled.
+                    }
+                });
+
+                alert.show();
             }
         });
     }

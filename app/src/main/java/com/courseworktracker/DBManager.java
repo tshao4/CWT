@@ -246,6 +246,31 @@ public class DBManager {
         return courses;
     }
 
+    public Course[] getCourse(String tname, String cname){
+//        Cursor cur = db.query(tname, new String[]{ATTR_CID, ATTR_CNAME, ATTR_CREDIT,
+//                        ATTR_CGRADE, ATTR_BID, ATTR_GID},
+//                "cname = \'" + cname + "\'", null, null, null, ATTR_CID);
+        String qry = "select * from " + tname + " where cname = ?";
+        Cursor cur = db.rawQuery(qry, new String[]{cname});
+
+        int count = cur.getCount();
+
+        Course[] courses = new Course[count];
+
+        cur.moveToFirst();
+
+        for(int i = 0; i < count; ++i) {
+            int credit = cur.getInt(cur.getColumnIndex(ATTR_CREDIT));
+            String grade = cur.getString(cur.getColumnIndex(ATTR_CGRADE));
+            int bid = cur.getInt(cur.getColumnIndex(ATTR_BID));
+            int gid = cur.getInt(cur.getColumnIndex(ATTR_GID));
+            courses[i] = new Course(cname, credit, grade, bid, gid);
+            cur.moveToNext();
+        }
+        cur.close();
+        return courses;
+    }
+
     public String[] getCourseNames(String tname) {
         Cursor cur = db.query(tname, new String[]{ATTR_CID, ATTR_CNAME},
                 null, null, null, null, ATTR_CID);
@@ -263,6 +288,8 @@ public class DBManager {
         cur.close();
         return courses;
     }
+
+
 
     public boolean deleteCourse(String tname, String cname) {
         String[] whereArgs = new String[] {cname};

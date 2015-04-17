@@ -1,6 +1,7 @@
 package com.courseworktracker;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -72,7 +74,31 @@ public class CourseDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         container.removeAllViews();
         // TODO: inflate layout
-        return inflater.inflate(R.layout.fragment_course_detail, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_course_detail, container, false);
+        TextView text_credits = (TextView)v.findViewById(R.id.textview_course_detail_credit_container);
+        TextView text_grade = (TextView)v.findViewById(R.id.textview_course_detail_grade_container);
+        TextView text_breadth = (TextView)v.findViewById(R.id.textview_course_detail_breadth_container);
+        TextView text_gen_ed = (TextView)v.findViewById(R.id.textview_course_detail_gen_ed_container);
+
+        dbm.open();
+        Course[] course = dbm.getCourse(getArguments().getString(ARG_TNAME), getArguments().getString(ARG_CNAME));
+        dbm.close();
+
+        if (text_credits == null)
+            Log.i("xxx", "sssssssss");
+
+        if (course.length > 0) {
+            text_credits.setText(Integer.toString(course[0].getCredit()));
+            text_grade.setText(course[0].getGrade());
+            Resources res = getResources();
+            String[] br = res.getStringArray(R.array.breadth);
+            text_breadth.setText(br[course[0].getBreadth()]);
+            String[] ge = res.getStringArray(R.array.gen_ed);
+            text_gen_ed.setText(ge[course[0].getGen_ed()]);
+        }
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -88,7 +114,7 @@ public class CourseDetailFragment extends Fragment {
         // update title
         ((MainActivity) activity).onCourseSectionAttached(
                 getArguments().getString(ARG_CNAME));
-        dbm = new DBManager(getActivity());
+        dbm = new DBManager(activity);
     }
 
     @Override

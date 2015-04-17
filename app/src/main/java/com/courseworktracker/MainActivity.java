@@ -205,7 +205,7 @@ public class MainActivity extends ActionBarActivity
                 courseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        // TODO course list click
+                        // course list click
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         fragmentManager.beginTransaction()
                                 .replace(R.id.container, CourseDetailFragment.newInstance(i,

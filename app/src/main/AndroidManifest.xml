@@ -18,7 +18,8 @@
         </activity>
         <activity
             android:name=".AddCourse"
-            android:label="@string/title_activity_add_course" >
+            android:label="@string/title_activity_add_course"
+            android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 
