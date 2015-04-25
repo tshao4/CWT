@@ -34,6 +34,8 @@ import android.database.SQLException;
 
 public class DBManager {
 
+    // TODO: add import/export functionality
+
     // Term
     private static final String ATTR_TID = "tid";
     private static final String ATTR_TNAME = "tname";
@@ -221,6 +223,17 @@ public class DBManager {
         values.put(ATTR_BID, bid);
         values.put(ATTR_GID, gid);
         return db.insert(tname, null, values);
+    }
+
+    public int updateCourse(String tname, String cname, Course course){
+
+        ContentValues values = new ContentValues();
+        values.put(ATTR_CNAME, course.getCname());
+        values.put(ATTR_CREDIT, course.getCredit());
+        values.put(ATTR_CGRADE, course.getGrade());
+        values.put(ATTR_BID, course.getBreadth());
+        values.put(ATTR_GID, course.getGen_ed());
+        return db.update(tname, values, ATTR_CNAME + " = ? ", new String[]{cname});
     }
 
     public Course[] getCourses(String tname){

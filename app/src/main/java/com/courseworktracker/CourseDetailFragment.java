@@ -1,6 +1,7 @@
 package com.courseworktracker;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -22,13 +25,13 @@ import android.widget.TextView;
  * create an instance of this fragment.
  */
 public class CourseDetailFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+
+    public static boolean doUpdate = false;
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POSITION = "position";
     private static final String ARG_CNAME = "cname";
     private static final String ARG_TNAME = "tname";
 
-    // TODO: Rename and change types of parameters
     private int position;
     private String tname;
     private String cname;
@@ -43,7 +46,6 @@ public class CourseDetailFragment extends Fragment {
      * @param position Parameter 1.
      * @return A new instance of fragment CourseDetailFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static CourseDetailFragment newInstance(int position, String tname, String cname) {
         CourseDetailFragment fragment = new CourseDetailFragment();
         Bundle args = new Bundle();
@@ -73,38 +75,43 @@ public class CourseDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         container.removeAllViews();
-        // TODO: inflate layout
 
         View v = inflater.inflate(R.layout.fragment_course_detail, container, false);
-        TextView text_credits = (TextView)v.findViewById(R.id.textview_course_detail_credit_container);
-        TextView text_grade = (TextView)v.findViewById(R.id.textview_course_detail_grade_container);
-        TextView text_breadth = (TextView)v.findViewById(R.id.textview_course_detail_breadth_container);
-        TextView text_gen_ed = (TextView)v.findViewById(R.id.textview_course_detail_gen_ed_container);
+        Button button_edit_course = (Button)v.findViewById(R.id.button_course_detail_edit);
 
-        dbm.open();
-        Course[] course = dbm.getCourse(getArguments().getString(ARG_TNAME), getArguments().getString(ARG_CNAME));
-        dbm.close();
+        final int[] info = getCourseInfo();
 
-        if (text_credits == null)
-            Log.i("xxx", "sssssssss");
+        v = refreshView(v, info);
 
-        if (course.length > 0) {
-            text_credits.setText(Integer.toString(course[0].getCredit()));
-            text_grade.setText(course[0].getGrade());
-            Resources res = getResources();
-            String[] br = res.getStringArray(R.array.breadth);
-            text_breadth.setText(br[course[0].getBreadth()]);
-            String[] ge = res.getStringArray(R.array.gen_ed);
-            text_gen_ed.setText(ge[course[0].getGen_ed()]);
-        }
+        button_edit_course.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddCourse.class);
+                intent.putExtra("tname", getArguments().getString(ARG_TNAME));
+                intent.putExtra("cname", getArguments().getString(ARG_CNAME));
+                intent.putExtra("mode", 1);
+                intent.putExtra("info", getCourseInfo());
+                startActivity(intent);
+            }
+        });
 
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        if (this.doUpdate) {
+            int[] info = getCourseInfo();
+            refreshView(getView(), info);
+            this.doUpdate = false;
         }
     }
 
@@ -139,4 +146,44 @@ public class CourseDetailFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+    private int[] getCourseInfo() {
+        int[] info = new int[4];
+        dbm.open();
+        Course[] course = dbm.getCourse(getArguments().getString(ARG_TNAME), getArguments().getString(ARG_CNAME));
+        dbm.close();
+        if (course.length > 0) {
+            info[0] = course[0].getCredit();
+
+            Resources res = getResources();
+            String[] gr = res.getStringArray(R.array.grade);
+            for (int i = 0; i < gr.length; i++) {
+                if (course[0].getGrade().equals(gr[i])) {
+                    info[1] = i;
+                    break;
+                }
+            }
+
+            info[2] = course[0].getBreadth();
+            info[3] = course[0].getGen_ed();
+        }
+        return info;
+    }
+
+    private View refreshView(View v, int[] info){
+        TextView text_credits = (TextView)v.findViewById(R.id.textview_course_detail_credit_container);
+        TextView text_grade = (TextView)v.findViewById(R.id.textview_course_detail_grade_container);
+        TextView text_breadth = (TextView)v.findViewById(R.id.textview_course_detail_breadth_container);
+        TextView text_gen_ed = (TextView)v.findViewById(R.id.textview_course_detail_gen_ed_container);
+
+        text_credits.setText(Integer.toString(info[0]));
+        Resources res = getResources();
+        String[] gr = res.getStringArray(R.array.grade);
+        text_grade.setText(gr[info[1]]);
+        String[] br = res.getStringArray(R.array.breadth);
+        text_breadth.setText(br[info[2] + 1]);
+        String[] ge = res.getStringArray(R.array.gen_ed);
+        text_gen_ed.setText(ge[info[3] + 1]);
+
+        return v;
+    }
 }

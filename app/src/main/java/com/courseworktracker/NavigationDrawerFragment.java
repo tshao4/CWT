@@ -3,7 +3,6 @@ package com.courseworktracker;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -23,8 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 /**
@@ -96,6 +98,53 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.relative_layout, container);
+
+        // TODO: button implementation add term, layout setup
+        Button button_a = (Button)inflater.inflate(R.layout.a_button, container);
+        RelativeLayout.LayoutParams layoutparam = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutparam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        layoutparam.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        button_a.setLayoutParams(layoutparam);
+        button_a.setText(getString(R.string.add_term));
+        button_a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+                alert.setTitle(getString(R.string.add_term));
+                alert.setMessage(getString(R.string.add_term_msg));
+
+                // Set an EditText view to get user input
+                final EditText input = new EditText(getActivity());
+                alert.setView(input);
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        String tname = input.getText().toString();
+                        dbm.open();
+                        if (dbm.existTerm(tname))
+                            Toast.makeText(getActivity(),
+                                    R.string.add_term_err_exist, Toast.LENGTH_SHORT).show();
+                        else
+                            dbm.addTerm(tname);
+                        dbm.close();
+                        refreshList();
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    // Canceled.
+                    }
+                });
+
+                alert.show();
+            }
+        });
+
         mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,7 +168,10 @@ public class NavigationDrawerFragment extends Fragment {
         ));
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+
+        rootView.addView(mDrawerListView);
+        rootView.addView(button_a);
+        return rootView;
     }
 
     public boolean isDrawerOpen() {
@@ -296,7 +348,6 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
         if (item.getItemId() == R.id.add_course) {
 
             if (mCurrentSelectedPosition < 1) {
@@ -306,6 +357,7 @@ public class NavigationDrawerFragment extends Fragment {
                 // invoke add course activity based on mCurrentSelectedPosition
                 Intent intent = new Intent(getActivity(), AddCourse.class);
                 intent.putExtra("tname", getTerms()[mCurrentSelectedPosition]);
+                intent.putExtra("mode", 0);
                 startActivity(intent);
             }
             return true;

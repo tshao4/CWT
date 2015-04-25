@@ -39,6 +39,7 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private CharSequence mTitleBak;
 
     private DBManager dbm = new DBManager(this);
 
@@ -49,7 +50,7 @@ public class MainActivity extends ActionBarActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        mTitle = mTitleBak = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -69,7 +70,7 @@ public class MainActivity extends ActionBarActivity
 
     public void onSectionAttached(int number) {
         String[] strs = mNavigationDrawerFragment.getTerms();
-        mTitle = strs[number - 1];
+        mTitle = mTitleBak = strs[number - 1];
     }
 
     public void onCourseSectionAttached(String s) {
@@ -82,7 +83,7 @@ public class MainActivity extends ActionBarActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        actionBar.setTitle(mTitleBak);
     }
 
 
@@ -106,41 +107,6 @@ public class MainActivity extends ActionBarActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.add_term) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-            alert.setTitle(getString(R.string.add_term));
-            alert.setMessage(getString(R.string.add_term_msg));
-
-            // Set an EditText view to get user input
-            final EditText input = new EditText(this);
-            alert.setView(input);
-
-            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-
-                String tname = input.getText().toString();
-                dbm.open();
-                if (dbm.existTerm(tname))
-                    Toast.makeText(getApplicationContext(),
-                            R.string.add_term_err_exist, Toast.LENGTH_SHORT).show();
-                else
-                    dbm.addTerm(tname);
-                dbm.close();
-                mNavigationDrawerFragment.refreshList();
-                }
-            });
-
-            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-                }
-            });
-
-            alert.show();
-            return true;
-        }
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -153,6 +119,12 @@ public class MainActivity extends ActionBarActivity
     public void onBackPressed() {
         // press back button go back to previous fragment
         FragmentManager fm = getSupportFragmentManager();
+
+        if (!mTitleBak.equals(mTitle)) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setTitle(mTitleBak);
+        }
+
         if (fm.getBackStackEntryCount() > 0)
             fm.popBackStack();
         else
@@ -239,15 +211,16 @@ public class MainActivity extends ActionBarActivity
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
-        dbm = new DBManager(getActivity());
+            dbm = new DBManager(getActivity());
         }
 
         @Override
         public void onResume() {
             super.onResume();  // Always call the superclass method first
 
-            if (doUpdate) {
+            if (this.doUpdate) {
                 refreshList();
+                this.doUpdate = false;
             }
         }
 
