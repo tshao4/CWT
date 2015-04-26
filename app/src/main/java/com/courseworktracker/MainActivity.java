@@ -3,6 +3,7 @@ package com.courseworktracker;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -29,10 +30,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+    // This is a handle so that we can call methods on our service
+    public ScheduleClient scheduleClient;
+
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -60,7 +66,19 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        
+
+        // TODO Notification Service
+        // use this to start and trigger a service
+        // Create a new service client and bind our activity to this service
+
+
+        scheduleClient = new ScheduleClient(this);
+        scheduleClient.doBindService();
+
+
+
+
+
 
     }
 
@@ -72,6 +90,10 @@ public class MainActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
+
+
+
+
     }
 
     public void onSectionAttached(int number) {
@@ -83,6 +105,8 @@ public class MainActivity extends ActionBarActivity
         mTitle = s;
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(mTitle);
+
+
     }
 
     public void restoreActionBar() {
@@ -153,6 +177,17 @@ public class MainActivity extends ActionBarActivity
             return true;
         }
 
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 18);
+        c.set(Calendar.MINUTE, 47);
+        c.set(Calendar.SECOND, 0);
+
+        // Ask our service to set an alarm for that date, this activity talks to the client that talks to the service
+        scheduleClient.setAlarmForNotification(c);
+
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -221,6 +256,9 @@ public class MainActivity extends ActionBarActivity
                 */
                 FragmentManager fragment = getActivity().getSupportFragmentManager();
                 fragment.beginTransaction().replace(R.id.container, OverviewFragment.newInstance()).commit();
+
+
+
             }
             /*if (position > 0) {
                 dbm.open();

@@ -2,11 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.courseworktracker" >
 
-    <service
-        android:name=".NotiService"
-        android:icon="@drawable/icon"
-        android:label="@string/Notification" >
-    </service>
 
     <application
         android:allowBackup="true"
@@ -27,11 +22,11 @@
             android:label="@string/title_activity_add_course" >
         </activity>
 
-        <service
-            android:name=".NotiService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
+        <service android:name=".NotiService" />
+        <service android:name=".ScheduleService" />
+
+
+
     </application>
 
 </manifest>
