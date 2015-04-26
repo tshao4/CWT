@@ -75,4 +75,12 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+    <string-array name="overview">
+        <item>Upcoming Assignment</item>
+        <item>Overall GPA</item>
+        <item>Major</item>
+        <item>Breadth Requirements</item>
+    </string-array>
+
 </resources>

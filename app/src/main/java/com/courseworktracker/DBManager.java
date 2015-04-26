@@ -34,6 +34,8 @@ import android.database.SQLException;
 
 public class DBManager {
 
+    // TODO: add import/export functionality
+
     // Term
     private static final String ATTR_TID = "tid";
     private static final String ATTR_TNAME = "tname";
@@ -201,6 +203,7 @@ public class DBManager {
         return strs;
     }
 
+
     public boolean existTerm(String tname) {
         String[] terms = getTerms();
         for (String t : terms) {
@@ -223,6 +226,17 @@ public class DBManager {
         return db.insert(tname, null, values);
     }
 
+    public int updateCourse(String tname, String cname, Course course){
+
+        ContentValues values = new ContentValues();
+        values.put(ATTR_CNAME, course.getCname());
+        values.put(ATTR_CREDIT, course.getCredit());
+        values.put(ATTR_CGRADE, course.getGrade());
+        values.put(ATTR_BID, course.getBreadth());
+        values.put(ATTR_GID, course.getGen_ed());
+        return db.update(tname, values, ATTR_CNAME + " = ? ", new String[]{cname});
+    }
+
     public Course[] getCourses(String tname){
         Cursor cur = db.query(tname, new String[]{ATTR_CID, ATTR_CNAME, ATTR_CREDIT,
                         ATTR_CGRADE, ATTR_BID, ATTR_GID},
@@ -235,6 +249,31 @@ public class DBManager {
 
         for(int i = 0; i < count; ++i) {
             String cname = cur.getString(cur.getColumnIndex(ATTR_CNAME));
+            int credit = cur.getInt(cur.getColumnIndex(ATTR_CREDIT));
+            String grade = cur.getString(cur.getColumnIndex(ATTR_CGRADE));
+            int bid = cur.getInt(cur.getColumnIndex(ATTR_BID));
+            int gid = cur.getInt(cur.getColumnIndex(ATTR_GID));
+            courses[i] = new Course(cname, credit, grade, bid, gid);
+            cur.moveToNext();
+        }
+        cur.close();
+        return courses;
+    }
+
+    public Course[] getCourse(String tname, String cname){
+//        Cursor cur = db.query(tname, new String[]{ATTR_CID, ATTR_CNAME, ATTR_CREDIT,
+//                        ATTR_CGRADE, ATTR_BID, ATTR_GID},
+//                "cname = \'" + cname + "\'", null, null, null, ATTR_CID);
+        String qry = "select * from " + tname + " where cname = ?";
+        Cursor cur = db.rawQuery(qry, new String[]{cname});
+
+        int count = cur.getCount();
+
+        Course[] courses = new Course[count];
+
+        cur.moveToFirst();
+
+        for(int i = 0; i < count; ++i) {
             int credit = cur.getInt(cur.getColumnIndex(ATTR_CREDIT));
             String grade = cur.getString(cur.getColumnIndex(ATTR_CGRADE));
             int bid = cur.getInt(cur.getColumnIndex(ATTR_BID));
@@ -263,6 +302,8 @@ public class DBManager {
         cur.close();
         return courses;
     }
+
+
 
     public boolean deleteCourse(String tname, String cname) {
         String[] whereArgs = new String[] {cname};
