@@ -100,7 +100,7 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.relative_layout, container);
 
-        // TODO: button implementation add term, layout setup
+        // button implementation add term, layout setup
         Button button_a = (Button)inflater.inflate(R.layout.a_button, container);
         RelativeLayout.LayoutParams layoutparam = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -263,13 +263,6 @@ public class NavigationDrawerFragment extends Fragment {
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
-
-        switch(position) {
-            case 0: // TODO on select title -- intent
-                break;
-            case 1: break;
-            default: break;
-        }
     }
 
     public boolean holdItem(int position, final String tname) {
@@ -288,6 +281,7 @@ public class NavigationDrawerFragment extends Fragment {
                 dbm.deleteTerm(tname);
                 dbm.close();
                 refreshList();
+                // TODO: jump to overview page after deleting a term
             }
         });
 

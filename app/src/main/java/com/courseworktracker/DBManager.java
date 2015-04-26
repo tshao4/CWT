@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.SQLException;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by TerryS on 2/6/15.
@@ -54,11 +58,17 @@ public class DBManager {
     private static final String ATTR_GID = "gid";
     private static final String ATTR_GNAME = "gname";
 
+    // Assignments
+    private static final String ATTR_AID = "aid";
+    private static final String ATTR_ANAME = "aname";
+    private static final String ATTR_DUE = "duedate";
+
 
     private static final String DB_NAME = "CWT_DB";
     private static final int DB_VERSION = 1;
 
     private static final String TABLE_TERM = "terms";
+    private static final String TABLE_ASSIGN = "assignments";
     private static final String TABLE_BREADTH = "breadth";
     private static final String TABLE_GEN_ED = "gen_ed";
 
@@ -92,6 +102,11 @@ public class DBManager {
                 db.execSQL("create table if not exists " + TABLE_GEN_ED +
                         "(gid integer primary key autoincrement, " +
                         "gname varchar not null)");
+
+                db.execSQL("create table if not exists " + TABLE_ASSIGN +
+                        "(aid integer primary key autoincrement, " +
+                        "aname varchar not null, duedate integer not null," +
+                        "cname varchar not null)");
 
                 Cursor cur = db.rawQuery("select 1 from " + TABLE_BREADTH, null);
 
@@ -172,8 +187,18 @@ public class DBManager {
         boolean tmp = false;
         try {
             db.beginTransaction();
+            Course[] courses = getCourses(tname);
+            ArrayList<String> cnames = new ArrayList<String>();
+            for (int i = 0; i < courses.length; i++) {
+                cnames.add(courses[i].getCname());
+            }
             db.execSQL("drop table if exists " + tname);
             tmp = db.delete(TABLE_TERM, ATTR_TNAME + "=?", whereArgs) > 0;
+
+            for (int i = 0; i < cnames.size(); i++) {
+                tmp = tmp && db.delete(TABLE_ASSIGN, ATTR_CNAME + "=?", new String[]{cnames.get(i)}) > 0;
+            }
+
             db.setTransactionSuccessful();
         }
         catch (Exception ex){
@@ -222,6 +247,7 @@ public class DBManager {
         values.put(ATTR_CGRADE, cgrade);
         values.put(ATTR_BID, bid);
         values.put(ATTR_GID, gid);
+
         return db.insert(tname, null, values);
     }
 
@@ -306,7 +332,20 @@ public class DBManager {
 
     public boolean deleteCourse(String tname, String cname) {
         String[] whereArgs = new String[] {cname};
-        return db.delete(tname, ATTR_CNAME + "=?", whereArgs) > 0;
+
+        boolean tmp = false;
+        try {
+            db.beginTransaction();
+            tmp = db.delete(TABLE_ASSIGN, ATTR_CNAME + "=?", whereArgs) > 0 && db.delete(tname, ATTR_CNAME + "=?", whereArgs) > 0;
+            db.setTransactionSuccessful();
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        finally {
+            db.endTransaction();
+        }
+        return tmp;
     }
 
     public boolean existCourse(String tname, String cname){
@@ -319,6 +358,42 @@ public class DBManager {
             }
         }
         return false;
+    }
+
+    public long addAssignment(String cname, CourseWork cw){
+        ContentValues values = new ContentValues();
+        values.put(ATTR_ANAME, cw.getAname());
+        values.put(ATTR_DUE, cw.getDuedate());
+        values.put(ATTR_CNAME, cw.getCname());
+
+        return db.insert(TABLE_ASSIGN, null, values);
+    }
+
+    public List<List<String>> getAssignemnts(String cname){
+        String[] whereArgs = new String[] {cname};
+        Cursor cur = db.query(TABLE_ASSIGN, new String[]{ATTR_ANAME, ATTR_DUE},
+                ATTR_CNAME + "=?", whereArgs, null, null, ATTR_DUE);
+
+        int count = cur.getCount();
+
+        List<List<String>> lists = new ArrayList<List<String>>(2);
+        lists.add(new ArrayList<String>());
+        lists.add(new ArrayList<String>());
+
+        cur.moveToFirst();
+
+        for(int i = 0; i < count; ++i) {
+            lists.get(0).add(cur.getString(cur.getColumnIndex(ATTR_ANAME)));
+            lists.get(1).add(Integer.toString(cur.getInt(cur.getColumnIndex(ATTR_DUE))));
+            cur.moveToNext();
+        }
+        cur.close();
+        return lists;
+    }
+
+    public boolean deleteAssignment(String cname, String aname) {
+        String[] whereArgs = new String[] {aname, cname};
+        return db.delete(TABLE_ASSIGN, ATTR_ANAME + "=? and " + ATTR_CNAME + "=?", whereArgs) > 0;
     }
     /*
     public long addToList(int lid, int sid) {

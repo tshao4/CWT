@@ -5,28 +5,33 @@ package com.courseworktracker;
  */
 public class CourseWork {
     private String category;
-    private String cwname;
+    private String cname;
+    private String aname;
     private String note;
     private double maxScore;
     private double gotScore; // -1 if in progress
-    private long dDate;
+    private int duedate;
 
-    public CourseWork(String category, String cwname, String note,
-                      double maxScore, double gotScore, long dDate){
-        this.category = category;
-        this.cwname = cwname;
-        this.note = note;
-        this.maxScore = maxScore;
-        this.gotScore = gotScore;
-        this.dDate = dDate;
+    public CourseWork(String cname, String aname, int duedate){
+    //  this.category = category;
+        this.cname = cname;
+        this.aname = aname;
+    //  this.note = note;
+    //  this.maxScore = maxScore;
+    //  this.gotScore = gotScore;
+        this.duedate = duedate;
     }
 
     public void setCategory(String category) {
         this.category = category;
     }
 
-    public void setCwname(String cwname) {
-        this.cwname = cwname;
+    public void setCname(String cname) {
+        this.cname = cname;
+    }
+
+    public void setAname(String aname) {
+        this.aname = aname;
     }
 
     public void setNote(String note) {
@@ -41,16 +46,20 @@ public class CourseWork {
         this.gotScore = gotScore;
     }
 
-    public void setdDate(long dDate) {
-        this.dDate = dDate;
+    public void setDuedate(int duedate) {
+        this.duedate = duedate;
     }
 
     public String getCategory() {
         return category;
     }
 
-    public String getCwname() {
-        return cwname;
+    public String getCname() {
+        return cname;
+    }
+
+    public String getAname() {
+        return aname;
     }
 
     public String getNote() {
@@ -65,7 +74,7 @@ public class CourseWork {
         return gotScore;
     }
 
-    public long getdDate() {
-        return dDate;
+    public int getDuedate() {
+        return duedate;
     }
 }

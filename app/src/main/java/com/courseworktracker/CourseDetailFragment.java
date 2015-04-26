@@ -1,6 +1,9 @@
 package com.courseworktracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -11,9 +14,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -27,6 +38,7 @@ import android.widget.TextView;
 public class CourseDetailFragment extends Fragment {
 
     public static boolean doUpdate = false;
+    public static boolean rList = false;
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POSITION = "position";
     private static final String ARG_CNAME = "cname";
@@ -78,6 +90,7 @@ public class CourseDetailFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_course_detail, container, false);
         Button button_edit_course = (Button)v.findViewById(R.id.button_course_detail_edit);
+        Button button_add_event = (Button)v.findViewById(R.id.button_course_detail_add_todo);
 
         final int[] info = getCourseInfo();
 
@@ -92,6 +105,87 @@ public class CourseDetailFragment extends Fragment {
                 intent.putExtra("mode", 1);
                 intent.putExtra("info", getCourseInfo());
                 startActivity(intent);
+            }
+        });
+
+        button_add_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+
+                Context context = view.getContext();
+                LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+
+                final EditText titleBox = new EditText(context);
+                titleBox.setHint("Title");
+                layout.addView(titleBox);
+
+                final EditText dueBox = new EditText(context);
+                dueBox.setHint("Due (mmddyyyy)");
+                layout.addView(dueBox);
+
+                alert.setView(layout);
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String title = titleBox.getText().toString();
+                        String dueDate = dueBox.getText().toString();
+                        boolean valid = true;
+
+                        int yy = 0, mm = 0, dd = 0;
+
+                        if (dueDate.length() != 8) {
+                            valid = false;
+                        }
+                        else {
+                            try {
+                                yy = Integer.parseInt(dueDate.substring(4));
+                                mm = Integer.parseInt(dueDate.substring(0,2));
+                                dd = Integer.parseInt(dueDate.substring(2,4));
+
+                            } catch (Exception e) {
+                                valid = false;
+                            }
+                        }
+
+                        if (valid) {
+                            int date = yy*10000 + mm*100 + dd;
+                            CourseWork cw = new CourseWork(getArguments().getString(ARG_CNAME), title, date);
+                            dbm.open();
+                            dbm.addAssignment(getArguments().getString(ARG_CNAME), cw);
+                            dbm.close();
+                            // refresh the list after addition
+                            refreshList();
+                        }
+                        else {
+                            Toast.makeText(view.getContext(),
+                                    R.string.add_assignment_format, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Canceled.
+                    }
+                });
+
+                alert.show();
+            }
+        });
+
+        List<List<String>> lists = getTodoList();
+
+        ListView todoList = (ListView)v.findViewById(R.id.listView_todoList);
+        CustomAdapter cadapter = new CustomAdapter(v.getContext(), lists.get(0), lists.get(1));
+        todoList.setAdapter(cadapter);
+
+        todoList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // TODO: onhold delete
+                return holdItem(getArguments().getString(ARG_CNAME), (String)adapterView.getItemAtPosition(i));
             }
         });
 
@@ -112,6 +206,11 @@ public class CourseDetailFragment extends Fragment {
             int[] info = getCourseInfo();
             refreshView(getView(), info);
             this.doUpdate = false;
+        }
+
+        if (this.rList) {
+            refreshList();
+            this.rList = false;
         }
     }
 
@@ -141,7 +240,6 @@ public class CourseDetailFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         // TODO: (if needed) implement onFragmentInteraction() in MainActivity
         public void onFragmentInteraction(Uri uri);
     }
@@ -169,6 +267,40 @@ public class CourseDetailFragment extends Fragment {
         return info;
     }
 
+    private List<List<String>> getTodoList(){
+        dbm.open();
+        List<List<String>> lists = dbm.getAssignemnts(getArguments().getString(ARG_CNAME));
+        dbm.close();
+        return lists;
+    }
+
+    public boolean holdItem(final String cname, final String aname) {
+
+        Bundle args = getArguments();
+        AlertDialog.Builder alert = new AlertDialog.Builder(this.getActivity());
+
+        alert.setTitle(getString(R.string.delete_assignment));
+        alert.setMessage(getString(R.string.delete_assignment_msg));
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dbm.open();
+                dbm.deleteAssignment(cname, aname);
+                dbm.close();
+                refreshList();
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
+        return true;
+    }
+
     private View refreshView(View v, int[] info){
         TextView text_credits = (TextView)v.findViewById(R.id.textview_course_detail_credit_container);
         TextView text_grade = (TextView)v.findViewById(R.id.textview_course_detail_grade_container);
@@ -185,5 +317,12 @@ public class CourseDetailFragment extends Fragment {
         text_gen_ed.setText(ge[info[3] + 1]);
 
         return v;
+    }
+
+    private void refreshList() {
+        ListView todoList = (ListView)getView().findViewById(R.id.listView_todoList);
+        List<List<String>> lists = getTodoList();
+        CustomAdapter cadapter = new CustomAdapter(getView().getContext(), lists.get(0), lists.get(1));
+        todoList.setAdapter(cadapter);
     }
 }

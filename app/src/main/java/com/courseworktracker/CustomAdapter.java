@@ -10,14 +10,14 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by TerryS on 3/10/15.
  */
 public class CustomAdapter extends BaseAdapter {
 
-    // TODO implement methods
-    ArrayList<String> title, data;
+    List<String> title, data;
 
     private LayoutInflater inflater = null;
 
@@ -26,7 +26,7 @@ public class CustomAdapter extends BaseAdapter {
         data = null;
     }
 
-    public CustomAdapter(Context context, ArrayList<String> title, ArrayList<String> data){
+    public CustomAdapter(Context context, List<String> title, List<String> data){
         this.inflater = LayoutInflater.from(context);
         this.title = title;
         this.data = data;
@@ -34,12 +34,15 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return title.size();
+        if (title == null)
+            return 0;
+        else
+            return title.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return i;
+        return this.title.get(i);
     }
 
     @Override
