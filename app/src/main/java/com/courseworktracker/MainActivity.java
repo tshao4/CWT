@@ -260,7 +260,7 @@ public class MainActivity extends ActionBarActivity
 
 
             }
-            /*if (position > 0) {
+            if (position > 0) {
                 dbm.open();
                 terms = dbm.getTerms();
 
@@ -293,7 +293,7 @@ public class MainActivity extends ActionBarActivity
                         courseNames));
                 container.addView(courseList);
             }
-            */
+
             return inflater.inflate(R.layout.fragment_main, container, false);
         }
 
@@ -356,14 +356,6 @@ public class MainActivity extends ActionBarActivity
             ));
         }
 
-        private ArrayList getListData(){
-            ArrayList<OverviewItem> results = new ArrayList<OverviewItem>();
-            String[] cats = getResources().getStringArray(R.array.overview);
-            for(int i = 0; i < 4; i++){
-                OverviewItem newItem = new OverviewItem(cats[i],"","");
 
-            }
-            return results;
-        }
     }
 }

@@ -25,6 +25,7 @@ public class OverviewItem {
     public String getDate(){
         return date;
     }
+
     public void setMainItem(String MainItem){
         this.mainItem = MainItem;
     }

@@ -77,11 +77,24 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string-array name="overview">
-        <item>Upcoming Assignment</item>
-        <item>Overall GPA</item>
-        <item>Major</item>
-        <item>Breadth Requirements</item>
-    </string-array>
+    <string name="upcoming">Upcoming Assignment</string>
+    <string name="overall_gpa">Overall GPA</string>
+    <string name="general">General Education</string>
+    <string name="breadth">Breadth Requirements</string>
+
+    <string name="add_course_add_section">Add..</string>
+    <string name="add_section">Add a Section</string>
+    <string name="add_section_msg">Enter section name and schedule:</string>
+
+    <string name="button_ok">OK</string>
+
+
+    <string name="course_detail_edit">Edit course</string>
+    <string name="course_detail_add_todo">Add an event</string>
+    <string name="course_detail_todoList">TODO List</string>
+    <string name="course_detail_container_empty">Null</string>
+    <string name="add_assignment_format">Please follow the date format</string>
+    <string name="delete_assignment">Delete an Event</string>
+    <string name="delete_assignment_msg">Are you sure you want to delete this event?</string>
 
 </resources>
