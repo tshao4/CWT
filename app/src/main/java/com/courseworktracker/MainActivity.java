@@ -3,6 +3,7 @@ package com.courseworktracker;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -22,13 +23,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+    // This is a handle so that we can call methods on our service
+    public ScheduleClient scheduleClient;
+
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -56,6 +66,21 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
+        // TODO Notification Service
+        // use this to start and trigger a service
+        // Create a new service client and bind our activity to this service
+
+
+        scheduleClient = new ScheduleClient(this);
+        scheduleClient.doBindService();
+
+
+
+
+
+
     }
 
     @Override
@@ -66,6 +91,10 @@ public class MainActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
+
+
+
+
     }
 
     public void onSectionAttached(int number) {
@@ -77,6 +106,8 @@ public class MainActivity extends ActionBarActivity
         mTitle = s;
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(mTitle);
+
+
     }
 
     public void restoreActionBar() {
@@ -112,6 +143,17 @@ public class MainActivity extends ActionBarActivity
             return true;
         }
 
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 18);
+        c.set(Calendar.MINUTE, 47);
+        c.set(Calendar.SECOND, 0);
+
+        // Ask our service to set an alarm for that date, this activity talks to the client that talks to the service
+        scheduleClient.setAlarmForNotification(c);
+
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -143,6 +185,9 @@ public class MainActivity extends ActionBarActivity
 
         public static boolean doUpdate = false;
 
+        private ListView overview;
+        private CustomListAdapter arrayAdapter;
+
         private ListView courseList;
         private String[] courseNames;
         String[] terms;
@@ -169,7 +214,24 @@ public class MainActivity extends ActionBarActivity
             container.removeAllViews();
             courseList = (ListView)inflater.inflate(R.layout.listview_layout, null);
             Bundle args = getArguments();
+            //overview = (ListView) inflater.inflate(R.layout.listview_overview_layout, null);
+
             final int position = args.getInt(ARG_SECTION_NUMBER) - 1;
+            if(position == 0) {
+                /*
+                //overview = (ListView)inflater.inflate(R.layout.listview_layout, null);
+                //overview = (ListView) getView().findViewById(R.id.listView_overview);
+                container.addView(overview);
+                ArrayList items = getListData();
+                arrayAdapter = new CustomListAdapter(getActivity(), items);
+                overview.setAdapter(arrayAdapter);
+                */
+                FragmentManager fragment = getActivity().getSupportFragmentManager();
+                fragment.beginTransaction().replace(R.id.container, OverviewFragment.newInstance()).commit();
+
+
+
+            }
             if (position > 0) {
                 dbm.open();
                 terms = dbm.getTerms();
@@ -203,11 +265,13 @@ public class MainActivity extends ActionBarActivity
                         courseNames));
                 container.addView(courseList);
             }
+
             return inflater.inflate(R.layout.fragment_main, container, false);
         }
 
         @Override
         public void onAttach(Activity activity) {
+            //here
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));

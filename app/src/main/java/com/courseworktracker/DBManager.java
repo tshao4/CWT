@@ -369,6 +369,35 @@ public class DBManager {
         return db.insert(TABLE_ASSIGN, null, values);
     }
 
+    public double[] Credits(){
+        String[] terms = getTerms();
+        double[] credits = {0, 0};
+        for(int i = 1; i < terms.length; i++){
+            Log.i("" + terms.length, terms[1]);
+            Course[] course = getCourses(terms[i]);
+            for(int j = 0; j < course.length; j++){
+                credits[0] = credits[0] + course[j].getCredit();
+                String grade = course[j].getGrade();
+                if(grade.equals("A")){
+                    credits[1] = credits[1] + 4;
+                } else if(grade.equals("AB")){
+                    credits[1] += 3.5;
+                }else if(grade.equals("B")){
+                    credits[1] += 3;
+                }else if(grade.equals("BC")){
+                    credits[1] += 2.5;
+                }else if(grade.equals("C")){
+                    credits[1] += 2;
+                }else if(grade.equals("D")){
+                    credits[1] += 1;
+                }
+            }
+        }
+        return credits;
+    }
+
+
+
     public List<List> getAssignemnts(String cname){
         String[] whereArgs = new String[] {cname};
         Cursor cur = db.query(TABLE_ASSIGN, new String[]{ATTR_ANAME, ATTR_DUE},
@@ -410,6 +439,7 @@ public class DBManager {
         cur.close();
         return list;
     }
+
 
     public boolean deleteAssignment(String cname, String aname) {
         String[] whereArgs = new String[] {aname, cname};

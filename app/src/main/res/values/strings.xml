@@ -41,6 +41,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_add_course">AddCourse</string>
     <string name="hello_world">Hello world!</string>
+    <string name="Notification">Notification</string>
 
     <string-array name="credits">
         <item>Select..</item>
@@ -85,4 +86,9 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+    <string name="upcoming">Upcoming Assignment</string>
+    <string name="overall_gpa">Overall GPA</string>
+    <string name="general">General Education</string>
+    <string name="breadth">Breadth Requirements</string>
 </resources>
