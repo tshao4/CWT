@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_content"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="10sp"/>
+        android:layout_marginStart="10dp"/>
 
     <TextView
         android:id="@+id/record"
@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10sp"/>
+        android:layout_marginEnd="10dp"/>
 
 </RelativeLayout>

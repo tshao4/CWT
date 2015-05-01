@@ -369,22 +369,22 @@ public class DBManager {
         return db.insert(TABLE_ASSIGN, null, values);
     }
 
-    public List<List<String>> getAssignemnts(String cname){
+    public List<List> getAssignemnts(String cname){
         String[] whereArgs = new String[] {cname};
         Cursor cur = db.query(TABLE_ASSIGN, new String[]{ATTR_ANAME, ATTR_DUE},
                 ATTR_CNAME + "=?", whereArgs, null, null, ATTR_DUE);
 
         int count = cur.getCount();
 
-        List<List<String>> lists = new ArrayList<List<String>>(2);
+        List<List> lists = new ArrayList<List>(2);
         lists.add(new ArrayList<String>());
-        lists.add(new ArrayList<String>());
+        lists.add(new ArrayList<Integer>());
 
         cur.moveToFirst();
 
         for(int i = 0; i < count; ++i) {
             lists.get(0).add(cur.getString(cur.getColumnIndex(ATTR_ANAME)));
-            lists.get(1).add(Integer.toString(cur.getInt(cur.getColumnIndex(ATTR_DUE))));
+            lists.get(1).add(cur.getInt(cur.getColumnIndex(ATTR_DUE)));
             cur.moveToNext();
         }
         cur.close();
@@ -393,7 +393,7 @@ public class DBManager {
 
     public List<CourseWork> getAllAssingments(){
         Cursor cur = db.query(TABLE_ASSIGN, new String[]{ATTR_ANAME, ATTR_DUE, ATTR_CNAME},
-                null, null, null, null, ATTR_DUE);
+                ATTR_CNAME + "=?", null, null, null, ATTR_DUE);
 
         int count = cur.getCount();
 

@@ -269,9 +269,10 @@ public class CourseDetailFragment extends Fragment {
 
     private List<List<String>> getTodoList(){
         dbm.open();
-        List<List<String>> lists = dbm.getAssignemnts(getArguments().getString(ARG_CNAME));
+        List<List> lists = dbm.getAssignemnts(getArguments().getString(ARG_CNAME));
         dbm.close();
-        return lists;
+
+        return CourseWork.getFormDate(lists);
     }
 
     public boolean holdItem(final String cname, final String aname) {
