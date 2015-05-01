@@ -184,7 +184,7 @@ public class CourseDetailFragment extends Fragment {
         todoList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: onhold delete
+                // onhold delete
                 return holdItem(getArguments().getString(ARG_CNAME), (String)adapterView.getItemAtPosition(i));
             }
         });

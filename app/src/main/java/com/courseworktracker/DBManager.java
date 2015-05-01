@@ -391,6 +391,26 @@ public class DBManager {
         return lists;
     }
 
+    public List<CourseWork> getAllAssingments(){
+        Cursor cur = db.query(TABLE_ASSIGN, new String[]{ATTR_ANAME, ATTR_DUE, ATTR_CNAME},
+                null, null, null, null, ATTR_DUE);
+
+        int count = cur.getCount();
+
+        List<CourseWork> list = new ArrayList<CourseWork>();
+
+        cur.moveToFirst();
+
+        for(int i = 0; i < count; ++i) {
+            CourseWork cw = new CourseWork(cur.getString(cur.getColumnIndex(ATTR_CNAME)),
+                    cur.getString(cur.getColumnIndex(ATTR_ANAME)), cur.getInt(cur.getColumnIndex(ATTR_DUE)));
+            list.add(cw);
+            cur.moveToNext();
+        }
+        cur.close();
+        return list;
+    }
+
     public boolean deleteAssignment(String cname, String aname) {
         String[] whereArgs = new String[] {aname, cname};
         return db.delete(TABLE_ASSIGN, ATTR_ANAME + "=? and " + ATTR_CNAME + "=?", whereArgs) > 0;

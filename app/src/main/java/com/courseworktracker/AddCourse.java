@@ -224,8 +224,7 @@ public class AddCourse extends ActionBarActivity {
         bt_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO custom dialog box
-                // add to sections listView
+                // TODO custom dialog box add to sections listView
                 AlertDialog.Builder alert = new AlertDialog.Builder(activity);
 
                 alert.setTitle(getString(R.string.add_section));
