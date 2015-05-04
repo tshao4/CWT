@@ -398,6 +398,8 @@ public class DBManager {
 
 
 
+
+
     public List<List> getAssignemnts(String cname){
         String[] whereArgs = new String[] {cname};
         Cursor cur = db.query(TABLE_ASSIGN, new String[]{ATTR_ANAME, ATTR_DUE},

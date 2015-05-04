@@ -36,6 +36,29 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/overall_credits"
+        android:id="@+id/textview_overview_credits"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/listView_upcoming"
+        android:textSize="@dimen/text_size_field_title"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="20dp"
+    />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textview_overview_credits_disp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textview_overview_credits"
+        android:textSize="@dimen/text_size_content"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="20dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/textview_overview_gpa_disp"
         android:layout_below="@+id/textview_overview_gpa"
         android:textSize="@dimen/text_size_content"
@@ -54,36 +77,30 @@
         android:layout_marginTop="20dp"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ListView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textview_overview_general_disp"
+        android:id="@+id/listView_general"
         android:layout_below="@+id/textview_overview_general"
-        android:textSize="@dimen/text_size_content"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_alignParentStart="true"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/breadth"
         android:id="@+id/textview_overview_breadth"
-        android:layout_below="@+id/textview_overview_general_disp"
+        android:layout_below="@+id/listView_general"
         android:textSize="@dimen/text_size_field_title"
         android:textColor="@android:color/black"
         android:layout_marginTop="20dp"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ListView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textview_overview_breadth_disp"
+        android:id="@+id/listView_breadth"
         android:layout_below="@+id/textview_overview_breadth"
-        android:textSize="@dimen/text_size_content"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_alignParentStart="true"/>
 
 
 

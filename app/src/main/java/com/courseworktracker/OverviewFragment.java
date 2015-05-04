@@ -99,7 +99,25 @@ public class OverviewFragment extends Fragment {
         double[] credits = dbm.Credits();
         dbm.close();
         TextView gpa_txt = (TextView) v.findViewById(R.id.textview_overview_gpa_disp);
-        gpa_txt.setText("" + credits[1]/credits[0]);
+        Double gpa = credits[1]/credits[0];
+        String Gpa = gpa.toString();
+        if(Gpa.length()>5) {
+            Gpa = Gpa.substring(0, 5);
+        }
+        gpa_txt.setText(Gpa);
+
+        TextView credit_txt = (TextView) v.findViewById(R.id.textview_overview_credits_disp);
+        credit_txt.setText("" + (int)credits[0]);
+
+        List<String> gen_ed = new ArrayList<String>();
+
+        String[] items = getResources().getStringArray(R.array.gen_ed);
+        for(int i = 2; i<=6; i++){
+            gen_ed.add(items[i]);
+        }
+
+
+
 
         return v;
     }

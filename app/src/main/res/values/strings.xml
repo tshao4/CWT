@@ -91,4 +91,6 @@
     <string name="overall_gpa">Overall GPA</string>
     <string name="general">General Education</string>
     <string name="breadth">Breadth Requirements</string>
+    <string name="overall_credits">Credits</string>
+
 </resources>
