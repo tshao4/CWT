@@ -371,25 +371,31 @@ public class DBManager {
 
     public double[] Credits(){
         String[] terms = getTerms();
-        double[] credits = {0, 0};
+        double[] credits = {0, 0, 0};
         for(int i = 1; i < terms.length; i++){
             Log.i("" + terms.length, terms[1]);
             Course[] course = getCourses(terms[i]);
             for(int j = 0; j < course.length; j++){
-                credits[0] = credits[0] + course[j].getCredit();
+                int tmp = course[j].getCredit();
                 String grade = course[j].getGrade();
+
+                if (!grade.equals("In Progress")) {
+                    credits[2] = credits[2] + tmp;
+                    if (!grade.equals("Not Graded"))
+                        credits[0] = credits[0] + tmp;
+                }
                 if(grade.equals("A")){
-                    credits[1] = credits[1] + 4;
+                    credits[1] = credits[1] + 4 * tmp;
                 } else if(grade.equals("AB")){
-                    credits[1] += 3.5;
+                    credits[1] += 3.5 * tmp;
                 }else if(grade.equals("B")){
-                    credits[1] += 3;
+                    credits[1] += 3 * tmp;
                 }else if(grade.equals("BC")){
-                    credits[1] += 2.5;
+                    credits[1] += 2.5 * tmp;
                 }else if(grade.equals("C")){
-                    credits[1] += 2;
+                    credits[1] += 2 * tmp;
                 }else if(grade.equals("D")){
-                    credits[1] += 1;
+                    credits[1] += 1 * tmp;
                 }
             }
         }
@@ -422,7 +428,7 @@ public class DBManager {
 
     public List<CourseWork> getAllAssingments(){
         Cursor cur = db.query(TABLE_ASSIGN, new String[]{ATTR_ANAME, ATTR_DUE, ATTR_CNAME},
-                ATTR_CNAME + "=?", null, null, null, ATTR_DUE);
+                null, null, null, null, ATTR_DUE);
 
         int count = cur.getCount();
 

@@ -64,34 +64,20 @@ public class OverviewFragment extends Fragment {
         dbm.open();
         List<CourseWork> assignments = dbm.getAllAssingments();
         dbm.close();
-        CourseWork ex = new CourseWork("faf","fsaf", 20150512);
-        assignments.add(ex);
-        Calendar currentDate = Calendar.getInstance();
-        Calendar dueDate = Calendar.getInstance();
-        ArrayList<String> coursework = new ArrayList<String>();
-        ArrayList<String> date = new ArrayList<String>();
-
         int count = assignments.size();
-        while(count > 0){
-            if(assignments.get(count-1) != null){
-                int due = assignments.get(count-1).getDuedate();
-                int day = due%100;
-                int month = (due - day)%10000/100;
-                int year = (due - month*100 - day)/10000;
-                dueDate.set(Calendar.YEAR, year);
-                dueDate.set(Calendar.MONTH, month-1);
-                dueDate.set(Calendar.DAY_OF_MONTH, day);
 
-                long diff = dueDate.getTimeInMillis() - currentDate.getTimeInMillis();
+        List<List> lists = new ArrayList<List>(2);
+        lists.add(new ArrayList<String>());
+        lists.add(new ArrayList<Integer>());
 
-                int days = (int) diff / (24 * 60 * 60 * 1000);
-                String dueIn = days + "D";
-                coursework.add(assignments.get(count-1).getAname());
-                date.add(dueIn);
-            }
-            count--;
+        for (int i = 0; i < count; i++) {
+            lists.get(0).add(assignments.get(i).getAname());
+            lists.get(1).add(assignments.get(i).getDuedate());
         }
-        CustomAdapter adapter = new CustomAdapter(v.getContext(), coursework, date);
+
+        List<List<String>> newList = CourseWork.getFormDate(lists);
+
+        CustomAdapter adapter = new CustomAdapter(v.getContext(), newList.get(0), newList.get(1));
         ListView assignList = (ListView) v.findViewById(R.id.listView_upcoming);
         assignList.setAdapter(adapter);
 

@@ -3,6 +3,7 @@ package com.courseworktracker;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -281,7 +282,8 @@ public class NavigationDrawerFragment extends Fragment {
                 dbm.deleteTerm(tname);
                 dbm.close();
                 refreshList();
-                // TODO: jump to overview page after deleting a term
+                FragmentManager fragment = getActivity().getSupportFragmentManager();
+                fragment.beginTransaction().replace(R.id.container, OverviewFragment.newInstance()).commit();
             }
         });
 
