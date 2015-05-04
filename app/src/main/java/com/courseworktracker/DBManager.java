@@ -369,9 +369,12 @@ public class DBManager {
         return db.insert(TABLE_ASSIGN, null, values);
     }
 
-    public double[] Credits(){
+    public List Credits(){
+        List list = new ArrayList(3);
         String[] terms = getTerms();
         double[] credits = {0, 0, 0};
+        boolean[] gen_ed = {false, false, false, false};
+        int[] breadth = {0, 0, 0, 0, 0, 0, 0};
         for(int i = 1; i < terms.length; i++){
             Log.i("" + terms.length, terms[1]);
             Course[] course = getCourses(terms[i]);
@@ -399,7 +402,10 @@ public class DBManager {
                 }
             }
         }
-        return credits;
+        list.add(credits);
+        list.add(gen_ed);
+        list.add(breadth);
+        return list;
     }
 
 
