@@ -369,7 +369,7 @@ public class DBManager {
         return db.insert(TABLE_ASSIGN, null, values);
     }
 
-    public List Credits(){
+    public List OverviewInfo(){
         List list = new ArrayList(3);
         String[] terms = getTerms();
         double[] credits = {0, 0, 0};
@@ -401,6 +401,8 @@ public class DBManager {
                     credits[1] += 1 * tmp;
                 }
             }
+
+
         }
         list.add(credits);
         list.add(gen_ed);

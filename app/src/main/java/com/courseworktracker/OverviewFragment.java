@@ -82,9 +82,10 @@ public class OverviewFragment extends Fragment {
         assignList.setAdapter(adapter);
 
         dbm.open();
-        double[] credits = dbm.Credits();
+        List info = dbm.OverviewInfo();
         dbm.close();
         TextView gpa_txt = (TextView) v.findViewById(R.id.textview_overview_gpa_disp);
+        double[] credits = (double[]) info.get(0);
         Double gpa = credits[1]/credits[0];
         String Gpa = gpa.toString();
         if(Gpa.length()>5) {
@@ -93,7 +94,7 @@ public class OverviewFragment extends Fragment {
         gpa_txt.setText(Gpa);
 
         TextView credit_txt = (TextView) v.findViewById(R.id.textview_overview_credits_disp);
-        credit_txt.setText("" + (int)credits[0]);
+        credit_txt.setText("" + (int)credits[2]);
 
         List<String> gen_ed = new ArrayList<String>();
 
@@ -102,6 +103,8 @@ public class OverviewFragment extends Fragment {
             gen_ed.add(items[i]);
         }
 
+
+        boolean[] gen = (boolean[]) info.get(1);
 
 
 
