@@ -213,9 +213,8 @@ public class MainActivity extends ActionBarActivity
                                  Bundle savedInstanceState) {
             // empty container at start
             container.removeAllViews();
-            courseList = (ListView)inflater.inflate(R.layout.listview_layout, null);
+            View layout = inflater.inflate(R.layout.fragment_main, container, false);
             Bundle args = getArguments();
-            //overview = (ListView) inflater.inflate(R.layout.listview_overview_layout, null);
 
             final int position = args.getInt(ARG_SECTION_NUMBER) - 1;
             if(position == 0) {
@@ -234,6 +233,7 @@ public class MainActivity extends ActionBarActivity
 
             }
             if (position > 0) {
+                ListView courseList = (ListView)layout.findViewById(R.id.listView_courseList);
                 dbm.open();
                 terms = dbm.getTerms();
 
@@ -264,10 +264,9 @@ public class MainActivity extends ActionBarActivity
                         android.R.layout.simple_list_item_activated_1,
                         android.R.id.text1,
                         courseNames));
-                container.addView(courseList);
             }
 
-            return inflater.inflate(R.layout.fragment_main, container, false);
+            return layout;
         }
 
         @Override
