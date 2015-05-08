@@ -71,7 +71,7 @@ public class OverviewFragment extends Fragment {
         lists.add(new ArrayList<Integer>());
 
         for (int i = 0; i < count; i++) {
-            lists.get(0).add(assignments.get(i).getAname());
+            lists.get(0).add(assignments.get(i).getCname() + " / " + assignments.get(i).getAname());
             lists.get(1).add(assignments.get(i).getDuedate());
         }
 
@@ -91,15 +91,12 @@ public class OverviewFragment extends Fragment {
         if(Gpa.length()>5) {
             Gpa = Gpa.substring(0, 5);
         }
-        gpa_txt.setText(Gpa);
-
-        TextView credit_txt = (TextView) v.findViewById(R.id.textview_overview_credits_disp);
-        credit_txt.setText("" + (int)credits[2]);
+        gpa_txt.setText(Gpa + "/" + (int)credits[2]);
 
         List<String> gen_ed = new ArrayList<String>();
 
         String[] items = getResources().getStringArray(R.array.gen_ed);
-        for(int i = 2; i<=6; i++){
+        for(int i = 2; i<6; i++){
             gen_ed.add(items[i]);
         }
 

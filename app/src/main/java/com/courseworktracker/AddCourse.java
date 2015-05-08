@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,7 +56,6 @@ public class AddCourse extends ActionBarActivity {
 
         Button bt_cancel = (Button)findViewById(R.id.button_cancel_add_course);
         Button bt_next = (Button)findViewById(R.id.button_ok_add_course);
-        Button bt_add = (Button)findViewById(R.id.button_add_section_add_course);
 
         ArrayAdapter<CharSequence> sp_credit_adt = ArrayAdapter.createFromResource(this,
                 R.array.credits, R.layout.spinner_target);
@@ -159,9 +159,7 @@ public class AddCourse extends ActionBarActivity {
             }
         });
 
-        ListView lv_sec = (ListView) findViewById(R.id.listView_section);
-
-        // add three buttons
+        // add buttons
 
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,7 +171,6 @@ public class AddCourse extends ActionBarActivity {
         bt_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            // TODO: add sections to db
 
                 String cname = course_name_et.getText().toString();
                 String temp = cname.substring(0);
@@ -221,34 +218,6 @@ public class AddCourse extends ActionBarActivity {
             }
         });
 
-        bt_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO custom dialog box add to sections listView
-                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-
-                alert.setTitle(getString(R.string.add_section));
-                alert.setMessage(getString(R.string.add_section_msg));
-
-                // Set an EditText view to get user input
-                final EditText input = new EditText(activity);
-                alert.setView(input);
-
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // TODO
-                    }
-                });
-
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // Canceled.
-                    }
-                });
-
-                alert.show();
-            }
-        });
     }
 
 
