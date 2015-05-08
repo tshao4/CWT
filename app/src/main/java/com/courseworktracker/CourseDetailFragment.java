@@ -156,6 +156,7 @@ public class CourseDetailFragment extends Fragment {
                             dbm.addAssignment(getArguments().getString(ARG_CNAME), cw);
                             dbm.close();
                             // refresh the list after addition
+                            // TODO: add notification time
                             refreshList();
                         }
                         else {
