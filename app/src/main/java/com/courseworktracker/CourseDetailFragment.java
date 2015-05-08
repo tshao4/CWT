@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -113,6 +116,9 @@ public class CourseDetailFragment extends Fragment {
             public void onClick(final View view) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
 
+                final ScheduleClient scheduleClient = new ScheduleClient(getActivity());
+                scheduleClient.doBindService();
+
                 Context context = view.getContext();
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
@@ -157,6 +163,27 @@ public class CourseDetailFragment extends Fragment {
                             dbm.close();
                             // refresh the list after addition
                             refreshList();
+
+                            SharedPreferences time = getActivity().getApplicationContext().getSharedPreferences("setting",0);
+                            int day = Integer.parseInt(time.getString("day",null));
+                            int hour = Integer.parseInt(time.getString("hour", null));
+
+
+                            Calendar calDue = Calendar.getInstance();
+                            calDue.set(Calendar.YEAR, yy);
+                            calDue.set(Calendar.MONTH, mm - 1);
+                            calDue.set(Calendar.DAY_OF_MONTH, dd);
+                            calDue.add(Calendar.DAY_OF_YEAR, 0 - day);
+
+                            calDue.set(Calendar.HOUR_OF_DAY, 18);
+                            calDue.set(Calendar.MINUTE,14);
+                            calDue.set(Calendar.SECOND,0);
+
+                            Log.i("time", calDue.getTime().toString());
+
+                            scheduleClient.setAlarmForNotification(calDue);
+
+
                         }
                         else {
                             Toast.makeText(view.getContext(),

@@ -1,9 +1,17 @@
 package com.courseworktracker;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import java.io.FileOutputStream;
 
 
 public class Settings extends ActionBarActivity {
@@ -11,7 +19,39 @@ public class Settings extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Context context = getApplicationContext();
+        final SharedPreferences sharedPreferences = context.getSharedPreferences("setting", 0);
+        SharedPreferences.Editor setting_editor =sharedPreferences.edit();
         setContentView(R.layout.activity_settings);
+        String day =sharedPreferences.getString("day", null);
+        String hour =sharedPreferences.getString("hour", null);
+        if (day == null){
+            day = "3";
+            hour = "8";
+            setting_editor.putString("day", day);
+            setting_editor.putString("hour", hour);
+        }
+
+        setContentView(R.layout.activity_settings);
+        EditText reminder = (EditText) findViewById(R.id.edittext_reminder);
+        EditText time = (EditText) findViewById(R.id.edittext_hour);
+        reminder.setText(day);
+        time.setText(hour);
+
+        Button done = (Button) findViewById(R.id.button_done_setting);
+        done.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                SharedPreferences.Editor setting = sharedPreferences.edit();
+                String day = "" + ((EditText) findViewById(R.id.edittext_reminder)).getText();
+                String hour = "" + (((EditText) findViewById(R.id.edittext_hour)).getText());
+                setting.putString("day", day);
+                setting.putString("hour", hour);
+                setting.apply();
+
+                finish();
+            }
+        });
+
     }
 
     @Override

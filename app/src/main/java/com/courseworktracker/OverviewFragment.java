@@ -97,16 +97,34 @@ public class OverviewFragment extends Fragment {
         credit_txt.setText("" + (int)credits[2]);
 
         List<String> gen_ed = new ArrayList<String>();
+        boolean[] gen = (boolean[]) info.get(1);
+        List<String> gen_ed_condi = new ArrayList<String>();
 
         String[] items = getResources().getStringArray(R.array.gen_ed);
-        for(int i = 2; i<=6; i++){
+        for(int i = 2; i<6; i++){
             gen_ed.add(items[i]);
+            if(gen[i-2]){
+                gen_ed_condi.add("Completed");
+            } else{
+                gen_ed_condi.add("Incomplete");
+            }
         }
+        adapter = new CustomAdapter(v.getContext(),gen_ed,gen_ed_condi);
+        ListView gen_lv = (ListView) v.findViewById(R.id.listView_general);
+        gen_lv.setAdapter(adapter);
 
 
-        boolean[] gen = (boolean[]) info.get(1);
-
-
+        items = getResources().getStringArray(R.array.breadth);
+        int[] breadth = (int[]) info.get(2);
+        List<String> breadth_name = new ArrayList<String>();
+        List<String> breadth_cre = new ArrayList<String>();
+        for(int i = 1; i< 8; i++){
+            breadth_name.add(items[i]);
+            breadth_cre.add("" + breadth[i-1]);
+        }
+        adapter = new CustomAdapter(v.getContext(),breadth_name,breadth_cre);
+        ListView breadth_lv = (ListView) v.findViewById(R.id.listView_breadth);
+        breadth_lv.setAdapter(adapter);
 
         return v;
     }

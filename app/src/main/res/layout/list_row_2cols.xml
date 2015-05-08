@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_content"
         android:layout_alignParentStart="true"
+        android:textColor="@android:color/black"
         android:layout_marginStart="10dp"/>
 
     <TextView
@@ -17,6 +18,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_content"
         android:layout_alignParentEnd="true"
+        android:textColor="@android:color/black"
         android:layout_marginEnd="10dp"/>
 
 </RelativeLayout>

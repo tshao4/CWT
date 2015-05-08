@@ -64,6 +64,8 @@ public class DBManager {
     private static final String ATTR_DUE = "duedate";
 
 
+
+
     private static final String DB_NAME = "CWT_DB";
     private static final int DB_VERSION = 1;
 
@@ -71,6 +73,7 @@ public class DBManager {
     private static final String TABLE_ASSIGN = "assignments";
     private static final String TABLE_BREADTH = "breadth";
     private static final String TABLE_GEN_ED = "gen_ed";
+    private static final String TABLE_SETTING = "settings";
 
     private DBHelper helper;
     private SQLiteDatabase db;
@@ -107,6 +110,7 @@ public class DBManager {
                         "(aid integer primary key autoincrement, " +
                         "aname varchar not null, duedate integer not null," +
                         "cname varchar not null)");
+
 
                 Cursor cur = db.rawQuery("select 1 from " + TABLE_BREADTH, null);
 
@@ -400,7 +404,50 @@ public class DBManager {
                 }else if(grade.equals("D")){
                     credits[1] += 1 * tmp;
                 }
+                int breadth_cat = course[j].getBreadth();
+                switch (breadth_cat){
+                    case 0:
+                        breadth[0] += tmp;
+                        break;
+                    case 1:
+                        breadth[1] += tmp;
+                        break;
+                    case 2:
+                        breadth[2] += tmp;
+                        break;
+                    case 3:
+                        breadth[3] += tmp;
+                        break;
+                    case 4:
+                        breadth[4] += tmp;
+                        break;
+                    case 5:
+                        breadth[5] += tmp;
+                        break;
+                    case 6:
+                        breadth[6] += tmp;
+                        break;
+                }
+
+                int gen = course[j].getGen_ed();
+                switch (gen){
+                    case 1:
+                        gen_ed[0] = true;
+                        break;
+                    case 2:
+                        gen_ed[1] = true;
+                        break;
+                    case 3:
+                        gen_ed[2] = true;
+                        break;
+                    case 4:
+                        gen_ed[3] = true;
+                        break;
+                }
+
             }
+
+
 
 
         }
@@ -461,6 +508,10 @@ public class DBManager {
         String[] whereArgs = new String[] {aname, cname};
         return db.delete(TABLE_ASSIGN, ATTR_ANAME + "=? and " + ATTR_CNAME + "=?", whereArgs) > 0;
     }
+
+
+
+
     /*
     public long addToList(int lid, int sid) {
 
