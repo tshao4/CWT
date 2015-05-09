@@ -39,7 +39,6 @@ public class ScheduleClient {
             // This is called when the connection with our service has been established,
             // giving us the service object we can use to interact with our service.
             mBoundService = ((ScheduleService.ServiceBinder) service).getService();
-            Log.i("here","2");
 
         }
         @Override
@@ -72,8 +71,8 @@ public class ScheduleClient {
      *
      * @param c a date to set the notification for
      */
-    public void setAlarmForNotification(Calendar c) {
-        mBoundService.setAlarm(c);
+    public void setAlarmForNotification(Calendar c, String msg, int date) {
+        mBoundService.setAlarm(c, msg, date);
     }
 
     /**

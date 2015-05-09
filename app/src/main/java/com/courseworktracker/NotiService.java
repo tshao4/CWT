@@ -22,6 +22,11 @@ public class NotiService extends Service {
         }
     }
 
+
+
+
+    private String msg;
+    private int time;
     // Unique id to identify the notification.
     private static final int NOTIFICATION = 123;
     // Name of an intent extra we can use to identify if this service was started to create a notification
@@ -41,10 +46,11 @@ public class NotiService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
-        // If this service was started by out AlarmTask intent then we want to show our notification
+        // If this service was started by out AlarmTask intent then we want to N our notification
         if(intent.getBooleanExtra(INTENT_NOTIFY, false))
             showNotification();
-
+        msg = intent.getStringExtra("message");
+        time = intent.getIntExtra("time", 8);
         // We don't care if this service is stopped as we have already delivered our notification
         return START_NOT_STICKY;
     }
@@ -61,12 +67,15 @@ public class NotiService extends Service {
      * Creates a notification and shows it in the OS drag-down status bar
      */
     private void showNotification() {
+
+
+
         // This is the 'title' of the notification
-        CharSequence title = "Alarm!!";
+        CharSequence title = "Coursework Tracker - Upcoming Assignment";
         // This is the icon to use on the notification
         int icon = R.drawable.ic_launcher;
         // This is the scrolling text of the notification
-        CharSequence text = "Your notification time is upon us.";
+        CharSequence text = msg + " is due in " + time + "day(s).";
         // What time to show on the notification
         long time = System.currentTimeMillis();
 

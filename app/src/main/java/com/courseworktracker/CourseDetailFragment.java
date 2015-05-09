@@ -180,8 +180,8 @@ public class CourseDetailFragment extends Fragment {
                             calDue.set(Calendar.SECOND,0);
 
                             Log.i("time", calDue.getTime().toString());
-
-                            scheduleClient.setAlarmForNotification(calDue);
+                            String msg = getArguments().getString(ARG_CNAME) + "/" + title;
+                            scheduleClient.setAlarmForNotification(calDue, msg, day);
 
 
                         }
