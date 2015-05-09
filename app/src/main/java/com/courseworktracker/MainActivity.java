@@ -66,21 +66,6 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
-
-        // TODO Notification Service
-        // use this to start and trigger a service
-        // Create a new service client and bind our activity to this service
-
-
-        scheduleClient = new ScheduleClient(this);
-        scheduleClient.doBindService();
-
-
-
-
-
-
     }
 
     @Override
@@ -143,18 +128,6 @@ public class MainActivity extends ActionBarActivity
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         }
-
-
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, 18);
-        c.set(Calendar.MINUTE, 47);
-        c.set(Calendar.SECOND, 0);
-
-        // Ask our service to set an alarm for that date, this activity talks to the client that talks to the service
-        scheduleClient.setAlarmForNotification(c);
-
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -233,7 +206,7 @@ public class MainActivity extends ActionBarActivity
 
             }
             if (position > 0) {
-                ListView courseList = (ListView)layout.findViewById(R.id.listView_courseList);
+                courseList = (ListView)layout.findViewById(R.id.listView_courseList);
                 dbm.open();
                 terms = dbm.getTerms();
 

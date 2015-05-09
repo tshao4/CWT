@@ -165,8 +165,8 @@ public class CourseDetailFragment extends Fragment {
                             refreshList();
 
                             SharedPreferences time = getActivity().getApplicationContext().getSharedPreferences("setting",0);
-                            int day = Integer.parseInt(time.getString("day",null));
-                            int hour = Integer.parseInt(time.getString("hour", null));
+                            int day = Integer.parseInt(time.getString("day","7"));
+                            int hour = Integer.parseInt(time.getString("hour", "8"));
 
 
                             Calendar calDue = Calendar.getInstance();
@@ -175,8 +175,8 @@ public class CourseDetailFragment extends Fragment {
                             calDue.set(Calendar.DAY_OF_MONTH, dd);
                             calDue.add(Calendar.DAY_OF_YEAR, 0 - day);
 
-                            calDue.set(Calendar.HOUR_OF_DAY, 18);
-                            calDue.set(Calendar.MINUTE,14);
+                            calDue.set(Calendar.HOUR_OF_DAY, hour);
+                            calDue.set(Calendar.MINUTE,0);
                             calDue.set(Calendar.SECOND,0);
 
                             Log.i("time", calDue.getTime().toString());

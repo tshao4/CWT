@@ -46,11 +46,11 @@ public class NotiService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
+        msg = intent.getStringExtra("message");
+        time = intent.getIntExtra("time", 8);
         // If this service was started by out AlarmTask intent then we want to N our notification
         if(intent.getBooleanExtra(INTENT_NOTIFY, false))
             showNotification();
-        msg = intent.getStringExtra("message");
-        time = intent.getIntExtra("time", 8);
         // We don't care if this service is stopped as we have already delivered our notification
         return START_NOT_STICKY;
     }
