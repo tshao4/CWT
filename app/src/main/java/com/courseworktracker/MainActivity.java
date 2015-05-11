@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.method.CharacterPickerDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -209,6 +210,7 @@ public class MainActivity extends ActionBarActivity
                 courseList = (ListView)layout.findViewById(R.id.listView_courseList);
                 dbm.open();
                 terms = dbm.getTerms();
+                Button bt_addc = (Button)layout.findViewById(R.id.button_add_course);
 
                 courseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -225,7 +227,7 @@ public class MainActivity extends ActionBarActivity
                 courseList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        return holdItem(i, (String)adapterView.getItemAtPosition(i));
+                        return holdItem(i, (String) adapterView.getItemAtPosition(i));
                     }
                 });
 
@@ -234,9 +236,20 @@ public class MainActivity extends ActionBarActivity
 
                 courseList.setAdapter(new ArrayAdapter<String>(
                         getActivity(),
-                        android.R.layout.simple_list_item_activated_1,
+                        R.layout.list_row,
                         android.R.id.text1,
                         courseNames));
+
+
+                bt_addc.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), AddCourse.class);
+                        intent.putExtra("tname", terms[position]);
+                        intent.putExtra("mode", 0);
+                        startActivity(intent);
+                    }
+                });
             }
 
             return layout;
@@ -297,7 +310,7 @@ public class MainActivity extends ActionBarActivity
             dbm.close();
             courseList.setAdapter(new ArrayAdapter<String>(
                     getActivity(),
-                    android.R.layout.simple_list_item_activated_1,
+                    R.layout.list_row,
                     android.R.id.text1,
                     courseNames
             ));

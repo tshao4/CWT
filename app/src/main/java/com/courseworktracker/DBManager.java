@@ -340,7 +340,7 @@ public class DBManager {
         boolean tmp = false;
         try {
             db.beginTransaction();
-            tmp = db.delete(TABLE_ASSIGN, ATTR_CNAME + "=?", whereArgs) > 0 && db.delete(tname, ATTR_CNAME + "=?", whereArgs) > 0;
+            tmp = db.delete(tname, ATTR_CNAME + "=?", whereArgs) > 0 && db.delete(tname, ATTR_CNAME + "=?", whereArgs) > 0;
             db.setTransactionSuccessful();
         }
         catch (Exception ex){
@@ -380,7 +380,6 @@ public class DBManager {
         boolean[] gen_ed = {false, false, false, false};
         int[] breadth = {0, 0, 0, 0, 0, 0, 0};
         for(int i = 1; i < terms.length; i++){
-            Log.i("" + terms.length, terms[1]);
             Course[] course = getCourses(terms[i]);
             for(int j = 0; j < course.length; j++){
                 int tmp = course[j].getCredit();

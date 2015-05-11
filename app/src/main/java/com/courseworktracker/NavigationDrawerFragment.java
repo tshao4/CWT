@@ -353,21 +353,6 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        if (item.getItemId() == R.id.add_course) {
-
-            if (mCurrentSelectedPosition < 1) {
-                Toast.makeText(getActivity(), R.string.overview_error_add_course, Toast.LENGTH_SHORT).show();
-            }
-            else {
-                // invoke add course activity based on mCurrentSelectedPosition
-                Intent intent = new Intent(getActivity(), AddCourse.class);
-                intent.putExtra("tname", getTerms()[mCurrentSelectedPosition]);
-                intent.putExtra("mode", 0);
-                startActivity(intent);
-            }
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
