@@ -340,7 +340,7 @@ public class DBManager {
         boolean tmp = false;
         try {
             db.beginTransaction();
-            tmp = db.delete(tname, ATTR_CNAME + "=?", whereArgs) > 0 && db.delete(tname, ATTR_CNAME + "=?", whereArgs) > 0;
+            tmp = db.delete(tname, ATTR_CNAME + "=?", whereArgs) > 0 & db.delete(TABLE_ASSIGN, ATTR_CNAME + "=?", whereArgs) > 0;
             db.setTransactionSuccessful();
         }
         catch (Exception ex){
