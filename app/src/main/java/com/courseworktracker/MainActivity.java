@@ -76,10 +76,6 @@ public class MainActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
-
-
-
-
     }
 
     public void onSectionAttached(int number) {
@@ -91,15 +87,19 @@ public class MainActivity extends ActionBarActivity
         mTitle = s;
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(mTitle);
-
-
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitleBak);
+        if (mNavigationDrawerFragment.getAfterDelete()) {
+            mTitle = "Overview";
+            actionBar.setTitle(mTitle);
+            mNavigationDrawerFragment.resetAfterDelete();
+        }else {
+            actionBar.setTitle(mTitleBak);
+        }
     }
 
 

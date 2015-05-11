@@ -58,6 +58,8 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private boolean afterDelete = false;
+
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
@@ -125,14 +127,20 @@ public class NavigationDrawerFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         String tname = input.getText().toString();
-                        dbm.open();
-                        if (dbm.existTerm(tname))
+                        tname = tname.replaceAll("[^A-Za-z0-9_]","");
+                        if (tname.length() < 1) {
                             Toast.makeText(getActivity(),
-                                    R.string.add_term_err_exist, Toast.LENGTH_SHORT).show();
-                        else
-                            dbm.addTerm(tname);
-                        dbm.close();
-                        refreshList();
+                                    R.string.add_term_err_invalid, Toast.LENGTH_SHORT).show();
+                        }else {
+                            dbm.open();
+                            if (dbm.existTerm(tname))
+                                Toast.makeText(getActivity(),
+                                        R.string.add_term_err_exist, Toast.LENGTH_SHORT).show();
+                            else
+                                dbm.addTerm(tname);
+                            dbm.close();
+                            refreshList();
+                        }
                     }
                 });
 
@@ -284,6 +292,7 @@ public class NavigationDrawerFragment extends Fragment {
                 refreshList();
                 FragmentManager fragment = getActivity().getSupportFragmentManager();
                 fragment.beginTransaction().replace(R.id.container, OverviewFragment.newInstance()).commit();
+                afterDelete = true;
             }
         });
 
@@ -402,5 +411,13 @@ public class NavigationDrawerFragment extends Fragment {
         strs[0] = getString(R.string.title_overview);
         dbm.close();
         return strs;
+    }
+
+    public boolean getAfterDelete(){
+        return afterDelete;
+    }
+
+    public void resetAfterDelete(){
+        afterDelete = false;
     }
 }
