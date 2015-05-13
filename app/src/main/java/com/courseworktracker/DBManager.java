@@ -200,7 +200,7 @@ public class DBManager {
             tmp = db.delete(TABLE_TERM, ATTR_TNAME + "=?", whereArgs) > 0;
 
             for (int i = 0; i < cnames.size(); i++) {
-                tmp = tmp && db.delete(TABLE_ASSIGN, ATTR_CNAME + "=?", new String[]{cnames.get(i)}) > 0;
+                tmp = tmp & db.delete(TABLE_ASSIGN, ATTR_CNAME + "=?", new String[]{cnames.get(i)}) > 0;
             }
 
             db.setTransactionSuccessful();

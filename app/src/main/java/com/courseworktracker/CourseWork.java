@@ -35,7 +35,7 @@ public class CourseWork {
         Calendar cal = Calendar.getInstance();
         Calendar calDue = Calendar.getInstance();
 
-        newList.add(list.get(0));
+        newList.add(new ArrayList<String>());
         newList.add(new ArrayList<String>());
 
         int counter = 0;
@@ -60,11 +60,13 @@ public class CourseWork {
 
                 long daydiff = diff / (24*60*60*1000);
 
+                newList.get(0).add((String)list.get(0).get(i));
                 newList.get(1).add(daydiff + "D");
             }
         }
 
-        for (;counter > 0; counter--) {
+        for (int i=0; i<counter; i++) {
+            newList.get(0).add((String)list.get(0).get(i));
             newList.get(1).add("PassDue");
         }
 

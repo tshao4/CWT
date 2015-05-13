@@ -64,20 +64,20 @@ public class OverviewFragment extends Fragment {
         dbm.open();
         List<CourseWork> assignments = dbm.getAllAssingments();
         dbm.close();
-        int count = assignments.size();
+        int count = assignments.size()>=5? 5:assignments.size();
 
         List<List> lists = new ArrayList<List>(2);
         lists.add(new ArrayList<String>());
         lists.add(new ArrayList<Integer>());
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < assignments.size(); i++) {
             lists.get(0).add(assignments.get(i).getCname() + " / " + assignments.get(i).getAname());
             lists.get(1).add(assignments.get(i).getDuedate());
         }
 
         List<List<String>> newList = CourseWork.getFormDate(lists);
 
-        CustomAdapter adapter = new CustomAdapter(v.getContext(), newList.get(0), newList.get(1));
+        CustomAdapter adapter = new CustomAdapter(v.getContext(), newList.get(0).subList(0,count), newList.get(1).subList(0,count));
         ListView assignList = (ListView) v.findViewById(R.id.listView_upcoming);
         assignList.setAdapter(adapter);
 
